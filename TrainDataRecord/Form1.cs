@@ -286,7 +286,7 @@ namespace TrainDataRecorder
             RecorderMode = RecorderModes.BVE;
             PrepareStartRecording();
 
-            Adapter = new Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter();
+            //Adapter = new Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter();
             Adapter.Start();
         }
 
