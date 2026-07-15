@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Tanuden.Rudolf.Adapters.BVE</name>
+    </assembly>
+    <members>
+        <member name="T:Tanuden.Rudolf.Adapters.BVE.BveAdapterStatus">
+            <summary>
+                Diagnostic snapshot of the BVE bridge reader, surfaced through
+                <see cref="M:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.GetAdapterExtensions" /> under the <c>bve:bridgeStatus</c> key. Analogous to
+                the TrainCrew adapter's <c>ApiStatus</c>.
+            </summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.BveAdapterStatus.FrameConnected">
+            <summary>True when the frame MMF is open (mapped).</summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.BveAdapterStatus.ProfileConnected">
+            <summary>True when the profile MMF is open (mapped).</summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.BveAdapterStatus.LastFrameGeneration">
+            <summary>Latest accepted frame generation, or 0 if none yet.</summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.BveAdapterStatus.LastFrameAgeMs">
+            <summary>Milliseconds since the frame generation last advanced; null if no frame ever read.</summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.BveAdapterStatus.IgnoredCommandCount">
+            <summary>Count of <see cref="T:Tanuden.Rudolf.Input.Command" />s dropped by the output-only bridge.</summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.BveAdapterStatus.LastError">
+            <summary>Most recent open/read error message; null when healthy.</summary>
+        </member>
+        <member name="T:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter">
+            <summary>
+                Reads BVE Trainsim state from the Minatogawa bridge's memory-mapped-file transport and exposes it
+                as Rudolf documents. The bridge (a BVE-EX plugin running inside BVE) already performs all
+                BVE -> Rudolf translation and writes finished <see cref="T:Tanuden.Rudolf.OutputDataFrame" /> /
+                <see cref="T:Tanuden.Rudolf.SimulatorProfile" /> JSON; this adapter is purely the reader side of that IPC.
+                <para>
+                    Reads are on-demand with a generation cache: each call does a lock-free seqlock read and only
+                    re-deserialises when the bridge's generation counter advances. Liveness is time-based (the
+                    mapping outlives BVE while we hold a handle), so <see cref="P:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.IsReady" /> reflects whether the
+                    generation has advanced recently rather than merely whether the file is open.
+                </para>
+                <para>Single consumer poll thread assumed; see <see cref="T:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel" />.</para>
+            </summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.IsReady">
+            <inheritdoc />
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.Start(System.Threading.CancellationToken)">
+            <inheritdoc />
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.GetCurrentFrame">
+            <inheritdoc />
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.GetProfile">
+            <inheritdoc />
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.Dispatch(Tanuden.Rudolf.Input.Command)">
+            <inheritdoc />
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.GetAdapterExtensions">
+            <inheritdoc />
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="F:Tanuden.Rudolf.Adapters.BVE.Internal.BveBridgeConstants.HeaderBytes">
+            <summary>Framing header size: <c>uint64</c> generation @0, <c>uint32</c> payload length @8.</summary>
+        </member>
+        <member name="F:Tanuden.Rudolf.Adapters.BVE.Internal.BveBridgeConstants.GenerationOffset">
+            <summary>Offset of the <c>uint64</c> generation counter (odd = write in progress, even = stable).</summary>
+        </member>
+        <member name="F:Tanuden.Rudolf.Adapters.BVE.Internal.BveBridgeConstants.LengthOffset">
+            <summary>Offset of the <c>uint32</c> payload length.</summary>
+        </member>
+        <member name="T:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel">
+            <summary>
+                One reader-side channel over a single Minatogawa bridge MMF (profile or frame). Owns the
+                memory-mapped file + view, performs the lock-free seqlock read, and tracks liveness via the
+                generation counter's last advance.
+                <para>
+                    Not thread-safe: a single consumer poll thread is assumed (matching the host's loop). If the
+                    host ever polls from multiple threads, callers must serialise access to a channel.
+                </para>
+            </summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel.IsOpen">
+            <summary>True once the MMF exists and a view is mapped.</summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel.LastGeneration">
+            <summary>The most recent stable generation accepted, or 0 if none yet.</summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel.LastError">
+            <summary>
+                Message from the most recent failed <see cref="M:System.IO.MemoryMappedFiles.MemoryMappedFile.OpenExisting(System.String)" />, or null when
+                healthy.
+            </summary>
+        </member>
+        <member name="P:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel.LastAdvanceUtc">
+            <summary>Wall-clock of the last generation advance, or null if the channel never produced a frame.</summary>
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel.IsLive(System.Int64)">
+            <summary>
+                True when the channel is open and the generation has advanced within <paramref name="timeoutMs" />.
+                Because the kernel keeps the mapping alive while we hold a handle (even after BVE exits), a
+                time-based check is the only reliable signal that the writer is still running.
+            </summary>
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel.EnsureOpen">
+            <summary>
+                Lazy open. Tolerates "bridge not running yet" (<see cref="M:System.IO.MemoryMappedFiles.MemoryMappedFile.OpenExisting(System.String)" />
+                throws <see cref="T:System.IO.FileNotFoundException" /> until the writer creates the MMF); the next
+                call retries. Returns true once a read-only view is mapped.
+            </summary>
+        </member>
+        <member name="M:Tanuden.Rudolf.Adapters.BVE.Internal.BveMmfChannel.TryReadFramed(System.Byte[]@,System.Boolean@)">
+            <summary>
+                Seqlock read. On a fresh, consistent frame sets <paramref name="payload" /> to the UTF-8 JSON and
+                <paramref name="changed" /> to true. When the generation is unchanged since the last read, returns
+                true with <paramref name="payload" /> null and <paramref name="changed" /> false (still connected,
+                nothing new). Returns false when the channel can't be opened or a stable read couldn't be obtained
+                within the bounded retries.
+            </summary>
+        </member>
+    </members>
+</doc>
