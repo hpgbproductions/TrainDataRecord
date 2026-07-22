@@ -39,6 +39,7 @@ namespace TrainDataRecorder
             buttonMoveDown = new Button();
             buttonMoveUp = new Button();
             groupBoxInit = new GroupBox();
+            buttonStartBVE = new Button();
             buttonStop = new Button();
             buttonStartTrainCrew = new Button();
             groupBoxData = new GroupBox();
@@ -165,6 +166,7 @@ namespace TrainDataRecorder
             // 
             // groupBoxInit
             // 
+            groupBoxInit.Controls.Add(buttonStartBVE);
             groupBoxInit.Controls.Add(buttonStop);
             groupBoxInit.Controls.Add(buttonStartTrainCrew);
             groupBoxInit.Location = new Point(456, 14);
@@ -174,7 +176,18 @@ namespace TrainDataRecorder
             groupBoxInit.Size = new Size(211, 141);
             groupBoxInit.TabIndex = 1;
             groupBoxInit.TabStop = false;
-            groupBoxInit.Text = "レコーダー　モード・切";
+            groupBoxInit.Text = "レコーダー　開始・切";
+            // 
+            // buttonStartBVE
+            // 
+            buttonStartBVE.Location = new Point(7, 57);
+            buttonStartBVE.Margin = new Padding(4, 3, 4, 3);
+            buttonStartBVE.Name = "buttonStartBVE";
+            buttonStartBVE.Size = new Size(197, 27);
+            buttonStartBVE.TabIndex = 12;
+            buttonStartBVE.Text = "BVE";
+            buttonStartBVE.UseVisualStyleBackColor = true;
+            buttonStartBVE.Click += buttonStartBVE_Click;
             // 
             // buttonStop
             // 
@@ -222,13 +235,12 @@ namespace TrainDataRecorder
             // 
             // checkBoxEuroMode
             // 
-            checkBoxEuroMode.AutoSize = true;
             checkBoxEuroMode.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxEuroMode.Location = new Point(305, 79);
+            checkBoxEuroMode.Location = new Point(282, 79);
             checkBoxEuroMode.Name = "checkBoxEuroMode";
-            checkBoxEuroMode.Size = new Size(97, 19);
+            checkBoxEuroMode.Size = new Size(120, 19);
             checkBoxEuroMode.TabIndex = 4;
-            checkBoxEuroMode.Text = "Europe Mode";
+            checkBoxEuroMode.Text = "European Mode";
             checkBoxEuroMode.TextAlign = ContentAlignment.MiddleRight;
             checkBoxEuroMode.UseVisualStyleBackColor = true;
             // 
@@ -371,6 +383,7 @@ namespace TrainDataRecorder
         private Label label6;
         private Label labelNumDataSelected;
         private CheckBox checkBoxEuroMode;
+        private Button buttonStartBVE;
     }
 }
 

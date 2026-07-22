@@ -193,7 +193,7 @@ namespace TrainDataRecorder
             groupBoxData.Enabled = false;
             panelDataSelect.Enabled = false;
             buttonStartTrainCrew.Enabled = false;
-            // buttonStartBVE.Enabled = false;
+            buttonStartBVE.Enabled = false;
             buttonStop.Enabled = true;
 
             timer = new System.Timers.Timer((double)(1000f / Frequency));
@@ -286,7 +286,7 @@ namespace TrainDataRecorder
             RecorderMode = RecorderModes.BVE;
             PrepareStartRecording();
 
-            //Adapter = new Tanuden.Rudolf.Adapters.BVE.BveRudolfAdapter();
+            Adapter = new Tanuden.Rudolf.Adapters.Bve.BveRudolfAdapter();
             Adapter.Start();
         }
 
@@ -296,7 +296,7 @@ namespace TrainDataRecorder
             groupBoxData.Enabled = true;
             panelDataSelect.Enabled = true;
             buttonStartTrainCrew.Enabled = true;
-            // buttonStartBVE.Enabled = true;
+            buttonStartBVE.Enabled = true;
             buttonStop.Enabled = false;
 
             // Signal to stop the adapter
@@ -313,6 +313,14 @@ namespace TrainDataRecorder
         {
             if (RecorderMode != RecorderModes.Disabled)
             {
+                if (Adapter is null)
+                {
+
+                    PrepareStopRecording();
+                    MessageBox.Show("Data access adapter unavailable.", "Error");
+                    return;
+                }
+
                 Frame = Adapter.GetCurrentFrame();
                 if (Frame is null)
                 {
