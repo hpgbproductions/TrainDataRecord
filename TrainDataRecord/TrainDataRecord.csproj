@@ -9,20 +9,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Tanuden.Rudolf" Version="0.1.0-alpha.1" />
-    <PackageReference Include="Tanuden.Rudolf.Adapters.TrainCrew" Version="1.0.0-alpha.3" />
     <PackageReference Include="Websocket.Client" Version="5.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="Tanuden.Rudolf">
-      <HintPath>..\..\TrainDataRecorder\TrainDataRecorder\dll\Tanuden.Rudolf.dll</HintPath>
+      <HintPath>..\..\Rudolf\dotnet\src\Tanuden.Rudolf\bin\Debug\netstandard2.0\Tanuden.Rudolf.dll</HintPath>
     </Reference>
     <Reference Include="Tanuden.Rudolf.Adapters.Bve">
       <HintPath>..\..\Tanuden.Adapters.Bve\bin\Debug\net10.0\Tanuden.Rudolf.Adapters.Bve.dll</HintPath>
     </Reference>
     <Reference Include="Tanuden.Rudolf.Adapters.TrainCrew">
-      <HintPath>..\..\TrainDataRecorder\TrainDataRecorder\dll\Tanuden.Rudolf.Adapters.TrainCrew.dll</HintPath>
+      <HintPath>..\..\Rudolf.Adapters.TrainCrew\bin\Debug\net10.0\Tanuden.Rudolf.Adapters.TrainCrew.dll</HintPath>
     </Reference>
     <Reference Include="TrainCrewInput">
       <HintPath>..\..\TrainDataRecorder\TrainDataRecorder\dll\TrainCrewInput.dll</HintPath>

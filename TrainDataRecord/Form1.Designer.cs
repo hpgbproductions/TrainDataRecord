@@ -43,6 +43,7 @@ namespace TrainDataRecorder
             buttonStop = new Button();
             buttonStartTrainCrew = new Button();
             groupBoxData = new GroupBox();
+            checkBoxSimProfile = new CheckBox();
             checkBoxEuroMode = new CheckBox();
             label5 = new Label();
             label4 = new Label();
@@ -214,6 +215,7 @@ namespace TrainDataRecorder
             // 
             // groupBoxData
             // 
+            groupBoxData.Controls.Add(checkBoxSimProfile);
             groupBoxData.Controls.Add(checkBoxEuroMode);
             groupBoxData.Controls.Add(label5);
             groupBoxData.Controls.Add(label4);
@@ -232,6 +234,17 @@ namespace TrainDataRecorder
             groupBoxData.TabIndex = 0;
             groupBoxData.TabStop = false;
             groupBoxData.Text = "設定";
+            // 
+            // checkBoxSimProfile
+            // 
+            checkBoxSimProfile.CheckAlign = ContentAlignment.MiddleRight;
+            checkBoxSimProfile.Location = new Point(264, 110);
+            checkBoxSimProfile.Name = "checkBoxSimProfile";
+            checkBoxSimProfile.Size = new Size(138, 19);
+            checkBoxSimProfile.TabIndex = 13;
+            checkBoxSimProfile.Text = "Get SimulatorProfile";
+            checkBoxSimProfile.TextAlign = ContentAlignment.MiddleRight;
+            checkBoxSimProfile.UseVisualStyleBackColor = true;
             // 
             // checkBoxEuroMode
             // 
@@ -384,6 +397,7 @@ namespace TrainDataRecorder
         private Label labelNumDataSelected;
         private CheckBox checkBoxEuroMode;
         private Button buttonStartBVE;
+        private CheckBox checkBoxSimProfile;
     }
 }
 

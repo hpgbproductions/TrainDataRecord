@@ -6,10 +6,12 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Tanuden.Rudolf;
 using Tanuden.Rudolf.Enums;
+using Tanuden.Rudolf.Json;
 
 namespace TrainDataRecorder
 {
@@ -27,6 +29,12 @@ namespace TrainDataRecorder
         bool EuropeMode = false;
         string ItemDelimiter = "";
         NumberFormatInfo NumberFormat = CultureInfo.InvariantCulture.NumberFormat;
+
+        bool WriteSimProfiles = false;
+        string PrevScenarioId = "";
+        string ProfilePath = "";
+        string ProfileSuffix = ".sp.json";
+        JsonSerializerOptions ProfileJsonSerializerOptions = new(RudolfJson.Options) { WriteIndented = true };
 
         FileStream fs;
         System.Timers.Timer timer;
@@ -216,6 +224,8 @@ namespace TrainDataRecorder
                 NumberFormat = CultureInfo.InvariantCulture.NumberFormat;
             }
 
+            WriteSimProfiles = checkBoxSimProfile.Checked;
+
             OutputPath = textBoxFilePath.Text;
             try
             {
@@ -227,6 +237,8 @@ namespace TrainDataRecorder
                 MessageBox.Show(ex.Message, "Error");
                 return;
             }
+
+            ProfilePath = OutputPath + ProfileSuffix;
 
             SelectedDataFields = new List<DataField>();
             foreach (string s in listBoxDataSelected.Items)
@@ -339,8 +351,18 @@ namespace TrainDataRecorder
                 {
                     fs.Write(Encoding.UTF8.GetBytes(GetDataString(Frame, dataField, NumCars, EuropeMode, NumberFormat) + ItemDelimiter));
                 }
-
                 fs.Write(Encoding.UTF8.GetBytes("\n"));
+
+                // Simulator Profile JSON file
+                if (WriteSimProfiles && Frame.ScenarioId != PrevScenarioId)
+                {
+                    PrevScenarioId = Frame.ScenarioId;
+                    SimulatorProfile? profile = Adapter.GetProfile();
+                    if (profile != null)
+                    {
+                        File.WriteAllText(ProfilePath, JsonSerializer.Serialize(profile, ProfileJsonSerializerOptions));
+                    }
+                }
             }
             else
             {
