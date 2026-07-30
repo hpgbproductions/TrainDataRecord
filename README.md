@@ -55,3 +55,82 @@ Uses libraries for [Rudolf](https://github.com/haruyukitanuki/Rudolf) and the [T
 
 9. Review your data.
 	- The CSV file can be opened in common office software.
+
+## Data Channels
+
+The information here is focused on data that is more relevant to train and driver performance, or has unique behaviors that can cause problems if not accounted for. Refer to [Rudolf specifications](https://github.com/haruyukitanuki/Rudolf/tree/main/spec) for more information.
+
+> [!IMPORTANT]
+> Data channels can produce null values. This happens when they are not supported, or when the null value carries a special meaning.
+
+| Name | Description |
+| :--- | :--- |
+| time_sim | [Text] Simulator time as a string.
+| time_elapsed | [Number] [s] Time in seconds, starting from an arbitrary number.
+| time_tick | [Number] Rudolf internal tick counter.
+| diagram_trainNumber | [Text]
+| diagram_boundFor | [Text]
+| diagram_serviceType | [Text]
+| diagram_direction | [Text]
+| diagram_runNumber | [Text]
+| stations_currentIndex | [Number] Null when not stopped at a station.
+| stations_nextIndex | [Number]
+| stations_next_name | [Text]
+| stations_next_fromStartDistance | [Number] [m] See `physics_fromStartDistance`.
+| stations_next_absoluteDistance | [Number] [m] See `physics_absoluteDistance`.
+| stations_next_doorSide | [Number] See `doors_perCar_SideOpened`.
+| stations_next_stopType | [Text]
+| stations_next_arrival | [Text]
+| stations_next_departure | [Text]
+| stations_next_stopPositionName | [Text]
+| stations_next_isTimeTaken | [Boolean]
+| physics_speed | [Number] [km/h]
+| physics_fromStartDistance | [Number] [m] Forward distance since the start point.
+| physics_absoluteDistance | [Number] [m] Absolute kilometer-post position on the route.
+| physics_gradient | [Number] [permille]
+| physics_mrPressure | [Number] [kPa] Main reservoir (MR).
+| controllers_powerNotch | [Number]
+| controllers_brakeNotch | [Number]
+| controllers_reverser | [Number] {-1 (reverse), 0, 1 (forward)}
+| controllers_ato_active | [Boolean]
+| controllers_ato_notch | [Number]
+| controllers_tasc_active | [Boolean]
+| controllers_tasc_notch | [Number]
+| controllers_tasc_inching | [Boolean]
+| controllers_deadman | [Text]
+| doors_allClosed | [Boolean]
+| doors_perCar_carNo | [Number] [Multi-column]
+| doors_perCar_sideOpened | [Number] [Multi-column] {-1 (left side open), 0 (closed), 1 (right side open), 2 (both sides open), 3 (unknown side open), null} In TRAIN CREW, only states 0 and 3 are supported.
+| lamps_doorClose | [Number]
+| lamps_atsReady | [Number]
+| lamps_atsBrakeApply | [Number]
+| lamps_atsOpen | [Number]
+| lamps_regenerative | [Number]
+| lamps_ebTimer | [Number]
+| lamps_emergencyBrake | [Number]
+| lamps_overload | [Number]
+| lamps_pilot | [Number]
+| lamps_ato | [Number]
+| ats_class | [Text]
+| ats_speed | [Number] {[km/h], -1 (unlimited), null (blank display)}
+| ats_state | [Text]
+| signals_next_name | [Text]
+| signals_next_type | [Text]
+| signals_next_phase | [Number] {0 (off), 1 (R), 2 (YY), 3 (Y), 4 (YG), 5 (YG flashing), 6 (G), 7 (GG), other sim-specific values} Speed to be determined from Simulator Profile.
+| signals_next_distance | [Number] [m]
+| speedLimit_current | [Number] [km/h]
+| speedLimit_currentType | [Text]
+| speedLimit_next | [Number] [km/h]
+| speedLimit_next_distance | [Number] [m]
+| speedLimit_next_type | [Text]
+| cars_carNo | [Number] [Multi-column]
+| cars_bcPressure | [Number] [Multi-column] [kPa] Brake cylinder (BC). In BVE, only one value is produced.
+| cars_amperage | [Number] [Multi-column] [A] Motor current draw. In BVE, only three values are produced. The first value is the current shown in the driver's cab. The other two values are a small number.
+| cars_occupancyRate | [Number] [Multi-column] [%] Car fill as a percentage, i.e., 50 (not 0.5) if the car is 50% full. Can exceed 100. Supported in TRAIN CREW. Not available in BVE.
+| switches_hornAir | [Boolean]
+| switches_hornElectric | [Boolean]
+| switches_buzzerDriver | [Boolean]
+| switches_buzzerConductor | [Boolean]
+| switches_headlights | [Boolean]
+| switches_highBeam | [Boolean]
+| switches_wiper | [Text]
