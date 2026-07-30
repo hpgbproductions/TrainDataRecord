@@ -197,6 +197,7 @@ namespace TrainDataRecorder
 
         private void PrepareStartRecording()
         {
+            #region form_actions
             // Change the interactivity of elements
             groupBoxData.Enabled = false;
             panelDataSelect.Enabled = false;
@@ -207,7 +208,9 @@ namespace TrainDataRecorder
             timer = new System.Timers.Timer((double)(1000f / Frequency));
             timer.Elapsed += OnTimerTick;
             timer.Start();
+            #endregion
 
+            #region other_settings
             EuropeMode = checkBoxEuroMode.Checked;
             if (EuropeMode)
             {
@@ -225,7 +228,9 @@ namespace TrainDataRecorder
             }
 
             WriteSimProfiles = checkBoxSimProfile.Checked;
+            #endregion
 
+            #region file_prep
             OutputPath = textBoxFilePath.Text;
             try
             {
@@ -239,7 +244,9 @@ namespace TrainDataRecorder
             }
 
             ProfilePath = OutputPath + ProfileSuffix;
+            #endregion
 
+            #region data_fields
             SelectedDataFields = new List<DataField>();
             foreach (string s in listBoxDataSelected.Items)
             {
@@ -251,7 +258,9 @@ namespace TrainDataRecorder
                 MessageBox.Show("No data channels selected.", "Error");
                 return;
             }
+            #endregion
 
+            #region beginning_of_file
             // File header
             fs.Write(Encoding.UTF8.GetBytes(OutputFileHeader + "\n"));
 
@@ -281,6 +290,7 @@ namespace TrainDataRecorder
                 }
             }
             fs.Write(Encoding.UTF8.GetBytes("\n"));
+            #endregion
         }
 
         private void buttonStartTrainCrew_Click(object sender, EventArgs e)

@@ -242,16 +242,16 @@ namespace TrainDataRecorder
             checkBoxSimProfile.Name = "checkBoxSimProfile";
             checkBoxSimProfile.Size = new Size(138, 19);
             checkBoxSimProfile.TabIndex = 13;
-            checkBoxSimProfile.Text = "Get SimulatorProfile";
+            checkBoxSimProfile.Text = "Get Simulator Profile";
             checkBoxSimProfile.TextAlign = ContentAlignment.MiddleRight;
             checkBoxSimProfile.UseVisualStyleBackColor = true;
             // 
             // checkBoxEuroMode
             // 
             checkBoxEuroMode.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxEuroMode.Location = new Point(282, 79);
+            checkBoxEuroMode.Location = new Point(264, 79);
             checkBoxEuroMode.Name = "checkBoxEuroMode";
-            checkBoxEuroMode.Size = new Size(120, 19);
+            checkBoxEuroMode.Size = new Size(138, 19);
             checkBoxEuroMode.TabIndex = 4;
             checkBoxEuroMode.Text = "European Mode";
             checkBoxEuroMode.TextAlign = ContentAlignment.MiddleRight;
