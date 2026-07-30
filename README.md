@@ -87,10 +87,10 @@ The information here is focused on data that is more relevant to train and drive
 | physics_speed | [Number] [km/h]
 | physics_fromStartDistance | [Number] [m] Forward distance since the start point.
 | physics_absoluteDistance | [Number] [m] Absolute kilometer-post position on the route.
-| physics_gradient | [Number] [permille]
+| physics_gradient | [Number] [‰ (permille)]
 | physics_mrPressure | [Number] [kPa] Main reservoir (MR).
-| controllers_powerNotch | [Number]
-| controllers_brakeNotch | [Number]
+| controllers_powerNotch | [Number] In TRAIN CREW, the HB positions on two-handle trains count as negative power notches.
+| controllers_brakeNotch | [Number] In TRAIN CREW, the HB position on one-handle trains counts as brake notch 1.
 | controllers_reverser | [Number] {-1 (reverse), 0, 1 (forward)}
 | controllers_ato_active | [Boolean]
 | controllers_ato_notch | [Number]
