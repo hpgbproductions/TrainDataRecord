@@ -66,8 +66,17 @@ Uses libraries for [Rudolf](https://github.com/haruyukitanuki/Rudolf) and the [T
 
 The information here is focused on data that is more relevant to train and driver performance, or has unique behaviors that can cause problems if not accounted for. Refer to [Rudolf specifications](https://github.com/haruyukitanuki/Rudolf/tree/main/spec) for more information.
 
-> [!IMPORTANT]
-> Data channels can produce null values. This happens when they are not supported, no data is present at that time, or when the null value carries a special meaning.
+### Notes
+
+- Data channels can produce null values. This can happen when:
+	- They are not supported by the simulator.
+	- No data is present at that time.
+	- The null value carries a special meaning.
+- Multi-column data channels generate one column in the CSV file per car.
+	- The number of columns is user-defined. If incorrectly set, there will be columns without data, or missing data.
+- Proportion units [%] and [‰] mean that the values are already multiplied by 100 or 1000 respectively.
+
+### List of Channels
 
 | Name | Description |
 | :--- | :--- |
@@ -97,7 +106,7 @@ The information here is focused on data that is more relevant to train and drive
 | physics_mrPressure | [Number] [kPa] Main reservoir (MR).
 | controllers_powerNotch | [Number] In TRAIN CREW, the HB positions on two-handle trains count as negative power notches.
 | controllers_brakeNotch | [Number] In TRAIN CREW, the HB position on one-handle trains counts as brake notch 1.
-| controllers_reverser | [Number] {-1 (reverse), 0, 1 (forward)}
+| controllers_reverser | [Number] {-1 (reverse), 0 (neutral), 1 (forward)}
 | controllers_ato_active | [Boolean]
 | controllers_ato_notch | [Number]
 | controllers_tasc_active | [Boolean]
