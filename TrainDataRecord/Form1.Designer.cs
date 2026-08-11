@@ -43,6 +43,7 @@ namespace TrainDataRecorder
             buttonStop = new Button();
             buttonStartTrainCrew = new Button();
             groupBoxData = new GroupBox();
+            checkBoxDataFrame = new CheckBox();
             checkBoxSimProfile = new CheckBox();
             checkBoxEuroMode = new CheckBox();
             label5 = new Label();
@@ -129,7 +130,7 @@ namespace TrainDataRecorder
             labelNumDataSelected.Name = "labelNumDataSelected";
             labelNumDataSelected.Size = new Size(99, 15);
             labelNumDataSelected.TabIndex = 8;
-            labelNumDataSelected.Text = "0つ有効";
+            labelNumDataSelected.Text = "0x 有効";
             labelNumDataSelected.TextAlign = ContentAlignment.TopRight;
             // 
             // label6
@@ -215,6 +216,7 @@ namespace TrainDataRecorder
             // 
             // groupBoxData
             // 
+            groupBoxData.Controls.Add(checkBoxDataFrame);
             groupBoxData.Controls.Add(checkBoxSimProfile);
             groupBoxData.Controls.Add(checkBoxEuroMode);
             groupBoxData.Controls.Add(label5);
@@ -235,6 +237,17 @@ namespace TrainDataRecorder
             groupBoxData.TabStop = false;
             groupBoxData.Text = "設定";
             // 
+            // checkBoxDataFrame
+            // 
+            checkBoxDataFrame.CheckAlign = ContentAlignment.MiddleRight;
+            checkBoxDataFrame.Location = new Point(264, 90);
+            checkBoxDataFrame.Name = "checkBoxDataFrame";
+            checkBoxDataFrame.Size = new Size(138, 19);
+            checkBoxDataFrame.TabIndex = 14;
+            checkBoxDataFrame.Text = "Data Frame JSON";
+            checkBoxDataFrame.TextAlign = ContentAlignment.MiddleRight;
+            checkBoxDataFrame.UseVisualStyleBackColor = true;
+            // 
             // checkBoxSimProfile
             // 
             checkBoxSimProfile.CheckAlign = ContentAlignment.MiddleRight;
@@ -242,14 +255,14 @@ namespace TrainDataRecorder
             checkBoxSimProfile.Name = "checkBoxSimProfile";
             checkBoxSimProfile.Size = new Size(138, 19);
             checkBoxSimProfile.TabIndex = 13;
-            checkBoxSimProfile.Text = "Get Simulator Profile";
+            checkBoxSimProfile.Text = "Sim Profile JSON";
             checkBoxSimProfile.TextAlign = ContentAlignment.MiddleRight;
             checkBoxSimProfile.UseVisualStyleBackColor = true;
             // 
             // checkBoxEuroMode
             // 
             checkBoxEuroMode.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxEuroMode.Location = new Point(264, 79);
+            checkBoxEuroMode.Location = new Point(264, 70);
             checkBoxEuroMode.Name = "checkBoxEuroMode";
             checkBoxEuroMode.Size = new Size(138, 19);
             checkBoxEuroMode.TabIndex = 4;
@@ -398,6 +411,7 @@ namespace TrainDataRecorder
         private CheckBox checkBoxEuroMode;
         private Button buttonStartBVE;
         private CheckBox checkBoxSimProfile;
+        private CheckBox checkBoxDataFrame;
     }
 }
 

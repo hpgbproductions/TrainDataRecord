@@ -22,19 +22,21 @@ namespace TrainDataRecorder
         List<DataField> SelectedDataFields;
 
         RecorderModes RecorderMode = RecorderModes.Disabled;
+        bool WriteOutput = false;
         float Frequency = 10;
         int NumCars = 6;
-        string OutputPath = "output.csv";
+        string OutputPath = "output.csv";   // preload with default value. do not make const
 
         bool EuropeMode = false;
-        string ItemDelimiter = "";
+        string ItemDelimiter = "";          // load when checking Europe Mode
         NumberFormatInfo NumberFormat = CultureInfo.InvariantCulture.NumberFormat;
 
         bool WriteSimProfiles = false;
         string PrevScenarioId = "";
         string ProfilePath = "";
-        string ProfileSuffix = ".sp.json";
-        JsonSerializerOptions ProfileJsonSerializerOptions = new(RudolfJson.Options) { WriteIndented = true };
+        bool WriteDataFrames = false;
+        string DataFramePath = "";
+        JsonSerializerOptions DebugJsonSerializerOptions = new(RudolfJson.Options) { WriteIndented = true };
 
         FileStream fs;
         System.Timers.Timer timer;
@@ -44,6 +46,8 @@ namespace TrainDataRecorder
 
         const string OutputFileHeader = "TrainDataRecorder Output V1";
         const string NumDataSelectedText = "x 有効";
+        const string ProfileSuffix = ".sp.json";
+        const string DataFrameSuffix = ".df.json";
 
         public Form1()
         {
@@ -55,6 +59,7 @@ namespace TrainDataRecorder
             listBoxDataAvailable.EndUpdate();
 
             textBoxFilePath.Text = OutputPath;
+            labelNumDataSelected.Text = NumDataSelected.ToString() + NumDataSelectedText;
         }
 
         private void buttonAdd_Click(object sender, EventArgs e)
@@ -227,22 +232,10 @@ namespace TrainDataRecorder
                 NumberFormat = CultureInfo.InvariantCulture.NumberFormat;
             }
 
+            WriteDataFrames = checkBoxDataFrame.Checked;
+            DataFramePath = OutputPath + DataFrameSuffix;
+
             WriteSimProfiles = checkBoxSimProfile.Checked;
-            #endregion
-
-            #region file_prep
-            OutputPath = textBoxFilePath.Text;
-            try
-            {
-                fs = new FileStream(OutputPath, FileMode.Create);
-            }
-            catch (Exception ex)
-            {
-                PrepareStopRecording();
-                MessageBox.Show(ex.Message, "Error");
-                return;
-            }
-
             ProfilePath = OutputPath + ProfileSuffix;
             #endregion
 
@@ -252,45 +245,65 @@ namespace TrainDataRecorder
             {
                 SelectedDataFields.Add(Enum.Parse<DataField>(s));
             }
+
             if (SelectedDataFields.Count == 0)
             {
-                PrepareStopRecording();
-                MessageBox.Show("No data channels selected.", "Error");
-                return;
+                WriteOutput = false;
             }
-            #endregion
-
-            #region beginning_of_file
-            // File header
-            fs.Write(Encoding.UTF8.GetBytes(OutputFileHeader + "\n"));
-
-            // Column titles
-            foreach (DataField df in SelectedDataFields)
+            else
             {
-                // First write the channel name
-                fs.Write(Encoding.UTF8.GetBytes(df.ToString()));
-
-                int numCommas;
-                if (df == DataField.doors_perCar_carNo || df == DataField.doors_perCar_sideOpened ||
-                    df == DataField.cars_amperage || df == DataField.cars_bcPressure ||
-                    df == DataField.cars_carNo || df == DataField.cars_occupancyRate)
-                {
-                    // Per-car channels occupy NumCars columns, write NumCars commas
-                    numCommas = NumCars;
-                }
-                else
-                {
-                    // Normal channels occupy one column each, so only one comma
-                    numCommas = 1;
-                }
-
-                for (int i = 0; i < numCommas; i++)
-                {
-                    fs.Write(Encoding.UTF8.GetBytes(ItemDelimiter));
-                }
+                WriteOutput = true;
             }
-            fs.Write(Encoding.UTF8.GetBytes("\n"));
             #endregion
+
+            if (WriteOutput)
+            {
+                #region file_prep
+                OutputPath = textBoxFilePath.Text;
+                try
+                {
+                    fs = new FileStream(OutputPath, FileMode.Create);
+                }
+                catch (Exception ex)
+                {
+                    PrepareStopRecording();
+                    MessageBox.Show(ex.Message, "Error");
+                    return;
+                }
+                #endregion
+
+                #region beginning_of_file
+                // File header
+                fs.Write(Encoding.UTF8.GetBytes(OutputFileHeader + "\n"));
+
+                // Column titles
+                foreach (DataField df in SelectedDataFields)
+                {
+                    // First write the channel name
+                    fs.Write(Encoding.UTF8.GetBytes(df.ToString()));
+
+                    int numCommas;
+                    if (df == DataField.doors_perCar_carNo || df == DataField.doors_perCar_sideOpened ||
+                        df == DataField.cars_amperage || df == DataField.cars_bcPressure ||
+                        df == DataField.cars_carNo || df == DataField.cars_occupancyRate)
+                    {
+                        // Per-car channels occupy NumCars columns, write NumCars commas
+                        numCommas = NumCars;
+                    }
+                    else
+                    {
+                        // Normal channels occupy one column each, so only one comma
+                        numCommas = 1;
+                    }
+
+                    for (int i = 0; i < numCommas; i++)
+                    {
+                        fs.Write(Encoding.UTF8.GetBytes(ItemDelimiter));
+                    }
+                }
+                fs.Write(Encoding.UTF8.GetBytes("\n"));
+                #endregion
+            }
         }
 
         private void buttonStartTrainCrew_Click(object sender, EventArgs e)
@@ -337,7 +350,6 @@ namespace TrainDataRecorder
             {
                 if (Adapter is null)
                 {
-
                     PrepareStopRecording();
                     MessageBox.Show("Data access adapter unavailable.", "Error");
                     return;
@@ -357,11 +369,20 @@ namespace TrainDataRecorder
 
                 // Generate the line for this frame
                 // Go through all selected datasets
-                foreach (DataField dataField in SelectedDataFields)
+                if (WriteOutput)
                 {
-                    fs.Write(Encoding.UTF8.GetBytes(GetDataString(Frame, dataField, NumCars, EuropeMode, NumberFormat) + ItemDelimiter));
+                    foreach (DataField dataField in SelectedDataFields)
+                    {
+                        fs.Write(Encoding.UTF8.GetBytes(GetDataString(Frame, dataField, NumCars, EuropeMode, NumberFormat) + ItemDelimiter));
+                    }
+                    fs.Write(Encoding.UTF8.GetBytes("\n"));
                 }
-                fs.Write(Encoding.UTF8.GetBytes("\n"));
+
+                // Data Frame JSON file
+                if (WriteDataFrames)
+                {
+                    File.WriteAllText(DataFramePath, JsonSerializer.Serialize(Frame, DebugJsonSerializerOptions));
+                }
 
                 // Simulator Profile JSON file
                 if (WriteSimProfiles && Frame.ScenarioId != PrevScenarioId)
@@ -370,7 +391,7 @@ namespace TrainDataRecorder
                     SimulatorProfile? profile = Adapter.GetProfile();
                     if (profile != null)
                     {
-                        File.WriteAllText(ProfilePath, JsonSerializer.Serialize(profile, ProfileJsonSerializerOptions));
+                        File.WriteAllText(ProfilePath, JsonSerializer.Serialize(profile, DebugJsonSerializerOptions));
                     }
                 }
             }

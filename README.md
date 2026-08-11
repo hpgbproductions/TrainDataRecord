@@ -13,7 +13,7 @@ Uses libraries for [Rudolf](https://github.com/haruyukitanuki/Rudolf) and the [T
 	- Use a relative file path (without drive letter) to generate the file in the same folder as the EXE.
 
 > [!CAUTION]
-> If the file already exists, **it will be overwritten.** No warning is given if the path is entered using the text box. The file is written when the recording is started.
+> If the file already exists, **it will be overwritten.** No warning is given if the path is entered using the text box. The file is written when the recording is started. The file is not written if no data channels are selected.
 
 2. Specify the frequency of data reading.
 	- The maximum frequency is 10 Hz.
@@ -28,9 +28,15 @@ Uses libraries for [Rudolf](https://github.com/haruyukitanuki/Rudolf) and the [T
 4. Check your system locale.
 	- Enable "European Mode" to change the CSV format for decimal-comma locales.
 
-5. Decide if the simulator profile should be generated.
-	- The file will be generated at `[file path from step 1].sp.json`.
-	- This file will be overwritten each time the simulator profile is changed.
+5. Decide if additional JSON files should be generated.
+	- Data frame will be produced at `[file path from step 1].df.json`.
+		- Written at the same frequency as data reading.
+	- Simulator profile will be produced at `[file path from step 1].sp.json`.
+		- Written each time the scenario ID is changed.
+	- This is mainly for debugging and studying.
+		- No warning will be given for overwriting files.
+		- Only the latest data will be available.
+		- Realtime changes can be seen in certain programs like VS Code.
 
 6. Add data channels.
 	- The panel on the left displays all available data channels.
@@ -61,7 +67,7 @@ Uses libraries for [Rudolf](https://github.com/haruyukitanuki/Rudolf) and the [T
 The information here is focused on data that is more relevant to train and driver performance, or has unique behaviors that can cause problems if not accounted for. Refer to [Rudolf specifications](https://github.com/haruyukitanuki/Rudolf/tree/main/spec) for more information.
 
 > [!IMPORTANT]
-> Data channels can produce null values. This happens when they are not supported, or when the null value carries a special meaning.
+> Data channels can produce null values. This happens when they are not supported, no data is present at that time, or when the null value carries a special meaning.
 
 | Name | Description |
 | :--- | :--- |
