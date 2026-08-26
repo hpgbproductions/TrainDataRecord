@@ -6,6 +6,8 @@ Data logger for TRAIN CREW. Exports train telemetry data in CSV files for later 
 
 Uses libraries for [Rudolf](https://github.com/haruyukitanuki/Rudolf) and the [TrainCrew adapter](https://github.com/haruyukitanuki/Rudolf.Adapters.TrainCrew) by [Haruyuki Tanukiji](https://github.com/haruyukitanuki).
 
+(Requires [this commit version](https://github.com/haruyukitanuki/Rudolf/commit/78db4fe4e704763453e8f365227beb94970f9a67) of Rudolf. Currently waiting for official support of Rudolf in TRAIN CREW.)
+
 ## Step-by-Step Guide
 
 1. Choose the location and name of the CSV file.
