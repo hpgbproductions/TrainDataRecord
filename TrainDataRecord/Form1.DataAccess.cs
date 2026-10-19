@@ -9,6 +9,7 @@ using Tanuden.Rudolf.Enums;
 using Tanuden.Rudolf.Adapters.Bve;
 using Tanuden.Rudolf.Adapters.TrainCrew;
 using Tanuden.Rudolf.Sections;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TrainDataRecorder
 {
@@ -77,16 +78,24 @@ namespace TrainDataRecorder
             object? result;
             Type rt = typeof(string);
 
-            bool stationListLoaded = frame.Stations.List.Count > 0;
-            bool doorListLoaded = frame.Doors.PerCar.Count > 0;
-            bool signalListLoaded = frame.Signals.List.Count > 0;
-            bool speedLimitListLoaded = frame.SpeedLimits.Next != null && frame.SpeedLimits.Next.Count > 0;
-            bool carListLoaded = frame.Cars.List.Count > 0;
+            bool doorListLoaded = frame.Doors.PerCar != null;
+            bool carListLoaded = frame.Cars.List != null;
 
-            bool nextStationExists = stationListLoaded && frame.Stations.NextIndex.HasValue &&
+            int nextStationIndex = frame.Stations.NextIndex.HasValue ? frame.Stations.NextIndex.Value : -1;
+
+            bool nextStationExists =
+                frame.Stations.List != null &&
+                frame.Stations.NextIndex.HasValue &&
                 frame.Stations.NextIndex.Value >= 0 &&
                 frame.Stations.NextIndex.Value < frame.Stations.List.Count;
-            int nextStationIndex = frame.Stations.NextIndex.HasValue ? frame.Stations.NextIndex.Value : -1;
+
+            bool nextSignalExists =
+                frame.Signals.List != null &&
+                frame.Signals.List.Count >= 1;
+
+            bool nextSpeedLimitExists =
+                frame.SpeedLimits.Next != null &&
+                frame.SpeedLimits.Next.Count >= 1;
 
             string itemDelimiter = euMode ? ";" : ",";
 
@@ -135,55 +144,55 @@ namespace TrainDataRecorder
                     rt = typeof(int);
                     break;
                 case DataField.stations_next_name:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Name : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].Name : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_fromStartDistance:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].FromStartDistance : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].FromStartDistance : null;
                     rt = typeof(double);
                     break;
                 case DataField.stations_next_absoluteDistance:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].AbsoluteDistance : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].AbsoluteDistance : null;
                     rt = typeof(double);
                     break;
                 case DataField.stations_next_doorSide:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].DoorSide : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].DoorSide : null;
                     rt = typeof(int);
                     break;
                 case DataField.stations_next_stopType:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].StopType : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].StopType : null;
                     rt = typeof(StopType);
                     break;
                 case DataField.stations_next_arrival:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Arrival : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].Arrival : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_departure:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Departure : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].Departure : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_stopPositionName:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].StopPositionName : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].StopPositionName : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_trackSectionName:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].TrackSectionName : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].TrackSectionName : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_remarks:
-                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Remarks : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].Remarks : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_entrySpeed:
-                    result = stationListLoaded ? frame.Stations.List[nextStationIndex].EntrySpeed : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].EntrySpeed : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_exitSpeed:
-                    result = stationListLoaded ? frame.Stations.List[nextStationIndex].ExitSpeed : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].ExitSpeed : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_isTimeTaken:
-                    result = stationListLoaded ? frame.Stations.List[nextStationIndex].IsTimeTaken : null;
+                    result = nextStationExists ? frame.Stations.List![nextStationIndex].IsTimeTaken : null;
                     rt = typeof(bool);
                     break;
 
@@ -263,7 +272,7 @@ namespace TrainDataRecorder
                         result = "";
                         for (int i = 0; i < numCars; i++)
                         {
-                            if (i < frame.Doors.PerCar.Count)
+                            if (i < frame.Doors.PerCar!.Count)
                             {
                                 result += DataToString(frame.Doors.PerCar[i].CarNo, typeof(int), numberFormatInfo);
                             }
@@ -290,7 +299,7 @@ namespace TrainDataRecorder
                         result = "";
                         for (int i = 0; i < numCars; i++)
                         {
-                            if (i < frame.Doors.PerCar.Count)
+                            if (i < frame.Doors.PerCar!.Count)
                             {
                                 result += DataToString(frame.Doors.PerCar[i].SideOpened, typeof(int), numberFormatInfo);
                             }
@@ -371,40 +380,40 @@ namespace TrainDataRecorder
                     break;
 
                 case DataField.signals_next_name:
-                    result = signalListLoaded ? frame.Signals.List[0].Name : null;
+                    result = nextSignalExists ? frame.Signals.List![0].Name : null;
                     rt = typeof(string);
                     break;
                 case DataField.signals_next_type:
-                    result = signalListLoaded ? frame.Signals.List[0].Type : null;
+                    result = nextSignalExists ? frame.Signals.List![0].Type : null;
                     rt = typeof(SignalType);
                     break;
                 case DataField.signals_next_phase:
-                    result = signalListLoaded ? frame.Signals.List[0].Phase : null;
+                    result = nextSignalExists ? frame.Signals.List![0].Phase : null;
                     rt = typeof(int);
                     break;
                 case DataField.signals_next_distance:
-                    result = signalListLoaded ? frame.Signals.List[0].Distance : null;
+                    result = nextSignalExists ? frame.Signals.List![0].Distance : null;
                     rt = typeof(double);
                     break;
 
                 case DataField.speedLimit_current:
-                    result = frame.SpeedLimit.Current;
+                    result = frame.SpeedLimits.Current;
                     rt = typeof(double);
                     break;
                 case DataField.speedLimit_currentType:
-                    result = frame.SpeedLimit.CurrentType;
+                    result = frame.SpeedLimits.CurrentType;
                     rt = typeof(SpeedLimitType);
                     break;
                 case DataField.speedLimit_next:
-                    result = speedLimitListLoaded ? frame.SpeedLimit.Next[0].Limit : null;
+                    result = nextSpeedLimitExists ? frame.SpeedLimits.Next![0].Limit : null;
                     rt = typeof(double);
                     break;
                 case DataField.speedLimit_next_distance:
-                    result = speedLimitListLoaded ? frame.SpeedLimit.Next[0].Distance : null;
+                    result = nextSpeedLimitExists ? frame.SpeedLimits.Next![0].Distance : null;
                     rt = typeof(double);
                     break;
                 case DataField.speedLimit_next_type:
-                    result = speedLimitListLoaded ? frame.SpeedLimit.Next[0].Type : null;
+                    result = nextSpeedLimitExists ? frame.SpeedLimits.Next![0].Type : null;
                     rt = typeof(SpeedLimitType);
                     break;
 
@@ -414,7 +423,7 @@ namespace TrainDataRecorder
                         result = "";
                         for (int i = 0; i < numCars; i++)
                         {
-                            if (i < frame.Cars.List.Count)
+                            if (i < frame.Cars.List!.Count)
                             {
                                 result += DataToString(frame.Cars.List[i].CarNo, typeof(int), numberFormatInfo);
                             }
@@ -495,7 +504,7 @@ namespace TrainDataRecorder
                         result = "";
                         for (int i = 0; i < numCars; i++)
                         {
-                            if (i < frame.Cars.List.Count)
+                            if (i < frame.Cars.List!.Count)
                             {
                                 result += DataToString(frame.Cars.List[i].OccupancyRate, typeof(double), numberFormatInfo);
                             }
