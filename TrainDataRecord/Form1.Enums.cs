@@ -65,7 +65,6 @@
             lamps_ebTimer,
             lamps_emergencyBrake,
             lamps_overload,
-            lamps_pilot,
             lamps_ato,
             lamps_snowBrake,
             lamps_wheelSlip,

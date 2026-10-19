@@ -199,12 +199,20 @@ namespace TrainDataRecorder
                     result = frame.Physics.AbsoluteDistance;
                     rt = typeof(double);
                     break;
+                case DataField.physics_curveRadius:
+                    result = frame.Physics.CurveRadius;
+                    rt = typeof(double);
+                    break;
                 case DataField.physics_gradient:
                     result = frame.Physics.Gradient;
                     rt = typeof(double);
                     break;
                 case DataField.physics_mrPressure:
                     result = frame.Physics.MrPressure;
+                    rt = typeof(double);
+                    break;
+                case DataField.physics_totalLoadMass:
+                    result = frame.Physics.TotalLoadMass;
                     rt = typeof(double);
                     break;
 
@@ -305,43 +313,47 @@ namespace TrainDataRecorder
                     break;
 
                 case DataField.lamps_doorClose:
-                    result = frame.Lamps.Values.ContainsKey("doorClose") ? frame.Lamps.Values["doorClose"] : null;
+                    result = frame.Lamps.Values[0];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_atsReady:
-                    result = frame.Lamps.Values.ContainsKey("atsReady") ? frame.Lamps.Values["atsReady"] : null;
+                    result = frame.Lamps.Values[1];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_atsBrakeApply:
-                    result = frame.Lamps.Values.ContainsKey("atsBrakeApply") ? frame.Lamps.Values["atsBrakeApply"] : null;
+                    result = frame.Lamps.Values[2];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_atsOpen:
-                    result = frame.Lamps.Values.ContainsKey("atsOpen") ? frame.Lamps.Values["atsOpen"] : null;
+                    result = frame.Lamps.Values[3];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_regenerative:
-                    result = frame.Lamps.Values.ContainsKey("regenerative") ? frame.Lamps.Values["regenerative"] : null;
+                    result = frame.Lamps.Values[4];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_ebTimer:
-                    result = frame.Lamps.Values.ContainsKey("ebTimer") ? frame.Lamps.Values["ebTimer"] : null;
+                    result = frame.Lamps.Values[5];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_emergencyBrake:
-                    result = frame.Lamps.Values.ContainsKey("emergencyBrake") ? frame.Lamps.Values["emergencyBrake"] : null;
+                    result = frame.Lamps.Values[6];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_overload:
-                    result = frame.Lamps.Values.ContainsKey("overload") ? frame.Lamps.Values["overload"] : null;
-                    rt = typeof(int);
-                    break;
-                case DataField.lamps_pilot:
-                    result = frame.Lamps.Values.ContainsKey("pilot") ? frame.Lamps.Values["pilot"] : null;
+                    result = frame.Lamps.Values[7];
                     rt = typeof(int);
                     break;
                 case DataField.lamps_ato:
-                    result = frame.Lamps.Values.ContainsKey("ato") ? frame.Lamps.Values["ato"] : null;
+                    result = frame.Lamps.Values[8];
+                    rt = typeof(int);
+                    break;
+                case DataField.lamps_snowBrake:
+                    result = frame.Lamps.Values[9];
+                    rt = typeof(int);
+                    break;
+                case DataField.lamps_wheelSlip:
+                    result = frame.Lamps.Values[10];
                     rt = typeof(int);
                     break;
 
