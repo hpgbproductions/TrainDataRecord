@@ -17,9 +17,9 @@ namespace TrainDataRecorder
 {
     public partial class Form1 : Form
     {
-        IRudolfAdapter Adapter;
-        OutputDataFrame Frame;
-        List<DataField> SelectedDataFields;
+        IRudolfAdapter? Adapter;
+        OutputDataFrame? Frame;
+        List<DataField> SelectedDataFields = new List<DataField>();
         RecorderModes RecorderMode = RecorderModes.Disabled;
 
         bool WriteOutput = false;
@@ -39,8 +39,8 @@ namespace TrainDataRecorder
         string DataFramePath = "";
         JsonSerializerOptions DebugJsonSerializerOptions = new(RudolfJson.Options) { WriteIndented = true };
 
-        FileStream fs;
-        System.Timers.Timer timer;
+        FileStream? OutputStream = null;
+        System.Timers.Timer? OutputTimer = null;
 
         // Need to keep track of this value as SelectedItems.Count does not update immediately
         int NumDataSelected = 0;
@@ -251,9 +251,9 @@ namespace TrainDataRecorder
             buttonStartDerailValley.Enabled = false;
             buttonStop.Enabled = true;
 
-            timer = new System.Timers.Timer((double)(1000f / Frequency));
-            timer.Elapsed += OnTimerTick;
-            timer.Start();
+            OutputTimer = new System.Timers.Timer((double)(1000f / Frequency));
+            OutputTimer.Elapsed += OnTimerTick;
+            OutputTimer.Start();
             #endregion
 
             #region other_settings
@@ -303,7 +303,7 @@ namespace TrainDataRecorder
                 OutputPath = textBoxFilePath.Text;
                 try
                 {
-                    fs = new FileStream(OutputPath, FileMode.Create);
+                    OutputStream = new FileStream(OutputPath, FileMode.Create);
                 }
                 catch (Exception ex)
                 {
@@ -315,13 +315,13 @@ namespace TrainDataRecorder
 
                 #region beginning_of_file
                 // File header
-                fs.Write(Encoding.UTF8.GetBytes(OutputFileHeader + "\n"));
+                OutputStream.Write(Encoding.UTF8.GetBytes(OutputFileHeader + "\n"));
 
                 // Column titles
                 foreach (DataField df in SelectedDataFields)
                 {
                     // First write the channel name
-                    fs.Write(Encoding.UTF8.GetBytes(df.ToString()));
+                    OutputStream.Write(Encoding.UTF8.GetBytes(df.ToString()));
 
                     int numCommas;
                     if (df == DataField.doors_perCar_carNo || df == DataField.doors_perCar_sideOpened ||
@@ -339,10 +339,10 @@ namespace TrainDataRecorder
 
                     for (int i = 0; i < numCommas; i++)
                     {
-                        fs.Write(Encoding.UTF8.GetBytes(ItemDelimiter));
+                        OutputStream.Write(Encoding.UTF8.GetBytes(ItemDelimiter));
                     }
                 }
-                fs.Write(Encoding.UTF8.GetBytes("\n"));
+                OutputStream.Write(Encoding.UTF8.GetBytes("\n"));
                 #endregion
             }
         }
@@ -425,11 +425,16 @@ namespace TrainDataRecorder
                 // Go through all selected datasets
                 if (WriteOutput)
                 {
+                    if (OutputStream == null)
+                    {
+                        throw new NullReferenceException("Attempted to write to CSV output FileStream when it is null.");
+                    }
+
                     foreach (DataField dataField in SelectedDataFields)
                     {
-                        fs.Write(Encoding.UTF8.GetBytes(GetDataString(Frame, dataField, NumCars, EuropeMode, NumberFormat) + ItemDelimiter));
+                        OutputStream.Write(Encoding.UTF8.GetBytes(GetDataString(Frame, dataField, NumCars, EuropeMode, NumberFormat) + ItemDelimiter));
                     }
-                    fs.Write(Encoding.UTF8.GetBytes("\n"));
+                    OutputStream.Write(Encoding.UTF8.GetBytes("\n"));
                 }
 
                 // Data Frame JSON file
@@ -451,15 +456,15 @@ namespace TrainDataRecorder
             }
             else
             {
-                if (fs != null)
+                if (OutputStream != null)
                 {
-                    fs.Close();
-                    fs.Dispose();
+                    OutputStream.Close();
+                    OutputStream.Dispose();
                 }
 
-                if (timer != null)
+                if (OutputTimer != null)
                 {
-                    timer.Dispose();
+                    OutputTimer.Dispose();
                 }
 
                 if (Adapter != null)

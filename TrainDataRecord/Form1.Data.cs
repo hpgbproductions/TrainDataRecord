@@ -135,9 +135,17 @@ namespace TrainDataRecorder
                 }
                 else
                 {
-                    // Other types, simply use the default ToString
+                    // Non-basic types, simply use the default ToString.
                     // Enums are converted to their string names
-                    return obj.ToString();
+                    string? s = obj.ToString();
+                    if (s == null || s == string.Empty)
+                    {
+                        return "null";
+                    }
+                    else
+                    {
+                        return s;
+                    }
                 }
             }
         }
