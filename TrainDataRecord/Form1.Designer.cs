@@ -29,20 +29,15 @@ namespace TrainDataRecorder
         /// </summary>
         private void InitializeComponent()
         {
-            listBoxDataAvailable = new ListBox();
-            listBoxDataSelected = new ListBox();
-            buttonAdd = new Button();
-            buttonRemove = new Button();
-            panelDataSelect = new Panel();
-            labelNumDataSelected = new Label();
-            label6 = new Label();
-            buttonMoveDown = new Button();
-            buttonMoveUp = new Button();
             groupBoxInit = new GroupBox();
+            buttonStartDerailValley = new Button();
             buttonStartBVE = new Button();
             buttonStop = new Button();
             buttonStartTrainCrew = new Button();
             groupBoxData = new GroupBox();
+            label8 = new Label();
+            label7 = new Label();
+            textBoxNumBogies = new TextBox();
             checkBoxDataFrame = new CheckBox();
             checkBoxSimProfile = new CheckBox();
             checkBoxEuroMode = new CheckBox();
@@ -55,119 +50,23 @@ namespace TrainDataRecorder
             buttonFilePath = new Button();
             label1 = new Label();
             textBoxFilePath = new TextBox();
-            panelDataSelect.SuspendLayout();
+            buttonAdd = new Button();
+            listBoxDataSelected = new ListBox();
+            buttonRemove = new Button();
+            listBoxDataAvailable = new ListBox();
+            buttonMoveUp = new Button();
+            buttonMoveDown = new Button();
+            label6 = new Label();
+            labelNumDataSelected = new Label();
+            panelDataSelect = new Panel();
             groupBoxInit.SuspendLayout();
             groupBoxData.SuspendLayout();
+            panelDataSelect.SuspendLayout();
             SuspendLayout();
-            // 
-            // listBoxDataAvailable
-            // 
-            listBoxDataAvailable.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            listBoxDataAvailable.FormattingEnabled = true;
-            listBoxDataAvailable.Location = new Point(0, 0);
-            listBoxDataAvailable.Margin = new Padding(4, 3, 4, 3);
-            listBoxDataAvailable.Name = "listBoxDataAvailable";
-            listBoxDataAvailable.SelectionMode = SelectionMode.MultiExtended;
-            listBoxDataAvailable.Size = new Size(291, 214);
-            listBoxDataAvailable.TabIndex = 20;
-            // 
-            // listBoxDataSelected
-            // 
-            listBoxDataSelected.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            listBoxDataSelected.FormattingEnabled = true;
-            listBoxDataSelected.Location = new Point(362, 0);
-            listBoxDataSelected.Margin = new Padding(4, 3, 4, 3);
-            listBoxDataSelected.Name = "listBoxDataSelected";
-            listBoxDataSelected.Size = new Size(291, 214);
-            listBoxDataSelected.TabIndex = 25;
-            // 
-            // buttonAdd
-            // 
-            buttonAdd.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            buttonAdd.Location = new Point(297, 74);
-            buttonAdd.Margin = new Padding(4, 3, 4, 3);
-            buttonAdd.Name = "buttonAdd";
-            buttonAdd.Size = new Size(61, 27);
-            buttonAdd.TabIndex = 22;
-            buttonAdd.Text = "→";
-            buttonAdd.UseVisualStyleBackColor = true;
-            buttonAdd.Click += buttonAdd_Click;
-            // 
-            // buttonRemove
-            // 
-            buttonRemove.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            buttonRemove.Location = new Point(297, 113);
-            buttonRemove.Margin = new Padding(4, 3, 4, 3);
-            buttonRemove.Name = "buttonRemove";
-            buttonRemove.Size = new Size(61, 27);
-            buttonRemove.TabIndex = 23;
-            buttonRemove.Text = "←";
-            buttonRemove.UseVisualStyleBackColor = true;
-            buttonRemove.Click += buttonRemove_Click;
-            // 
-            // panelDataSelect
-            // 
-            panelDataSelect.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
-            panelDataSelect.AutoSize = true;
-            panelDataSelect.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            panelDataSelect.Controls.Add(labelNumDataSelected);
-            panelDataSelect.Controls.Add(label6);
-            panelDataSelect.Controls.Add(buttonMoveDown);
-            panelDataSelect.Controls.Add(buttonMoveUp);
-            panelDataSelect.Controls.Add(listBoxDataAvailable);
-            panelDataSelect.Controls.Add(buttonRemove);
-            panelDataSelect.Controls.Add(listBoxDataSelected);
-            panelDataSelect.Controls.Add(buttonAdd);
-            panelDataSelect.Location = new Point(14, 173);
-            panelDataSelect.Margin = new Padding(4, 3, 4, 3);
-            panelDataSelect.Name = "panelDataSelect";
-            panelDataSelect.Size = new Size(662, 235);
-            panelDataSelect.TabIndex = 4;
-            // 
-            // labelNumDataSelected
-            // 
-            labelNumDataSelected.Location = new Point(552, 217);
-            labelNumDataSelected.Name = "labelNumDataSelected";
-            labelNumDataSelected.Size = new Size(99, 15);
-            labelNumDataSelected.TabIndex = 8;
-            labelNumDataSelected.Text = "0x 有効";
-            labelNumDataSelected.TextAlign = ContentAlignment.TopRight;
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(0, 217);
-            label6.Name = "label6";
-            label6.Size = new Size(163, 15);
-            label6.TabIndex = 6;
-            label6.Text = "使用可能なデーターチャンネル";
-            // 
-            // buttonMoveDown
-            // 
-            buttonMoveDown.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            buttonMoveDown.Location = new Point(329, 187);
-            buttonMoveDown.Margin = new Padding(4, 3, 4, 3);
-            buttonMoveDown.Name = "buttonMoveDown";
-            buttonMoveDown.Size = new Size(29, 27);
-            buttonMoveDown.TabIndex = 24;
-            buttonMoveDown.Text = "↓";
-            buttonMoveDown.UseVisualStyleBackColor = true;
-            buttonMoveDown.Click += buttonMoveDown_Click;
-            // 
-            // buttonMoveUp
-            // 
-            buttonMoveUp.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            buttonMoveUp.Location = new Point(329, 0);
-            buttonMoveUp.Margin = new Padding(4, 3, 4, 3);
-            buttonMoveUp.Name = "buttonMoveUp";
-            buttonMoveUp.Size = new Size(29, 27);
-            buttonMoveUp.TabIndex = 21;
-            buttonMoveUp.Text = "↑";
-            buttonMoveUp.UseVisualStyleBackColor = true;
-            buttonMoveUp.Click += buttonMoveUp_Click;
             // 
             // groupBoxInit
             // 
+            groupBoxInit.Controls.Add(buttonStartDerailValley);
             groupBoxInit.Controls.Add(buttonStartBVE);
             groupBoxInit.Controls.Add(buttonStop);
             groupBoxInit.Controls.Add(buttonStartTrainCrew);
@@ -175,14 +74,25 @@ namespace TrainDataRecorder
             groupBoxInit.Margin = new Padding(4, 3, 4, 3);
             groupBoxInit.Name = "groupBoxInit";
             groupBoxInit.Padding = new Padding(4, 3, 4, 3);
-            groupBoxInit.Size = new Size(211, 141);
+            groupBoxInit.Size = new Size(211, 175);
             groupBoxInit.TabIndex = 1;
             groupBoxInit.TabStop = false;
             groupBoxInit.Text = "レコーダー　開始・切";
             // 
+            // buttonStartDerailValley
+            // 
+            buttonStartDerailValley.Location = new Point(7, 90);
+            buttonStartDerailValley.Margin = new Padding(4, 3, 4, 3);
+            buttonStartDerailValley.Name = "buttonStartDerailValley";
+            buttonStartDerailValley.Size = new Size(197, 27);
+            buttonStartDerailValley.TabIndex = 13;
+            buttonStartDerailValley.Text = "DERAIL VALLEY";
+            buttonStartDerailValley.UseVisualStyleBackColor = true;
+            buttonStartDerailValley.Click += buttonStartDerailValley_Click;
+            // 
             // buttonStartBVE
             // 
-            buttonStartBVE.Location = new Point(7, 57);
+            buttonStartBVE.Location = new Point(7, 56);
             buttonStartBVE.Margin = new Padding(4, 3, 4, 3);
             buttonStartBVE.Name = "buttonStartBVE";
             buttonStartBVE.Size = new Size(197, 27);
@@ -194,7 +104,7 @@ namespace TrainDataRecorder
             // buttonStop
             // 
             buttonStop.Enabled = false;
-            buttonStop.Location = new Point(7, 107);
+            buttonStop.Location = new Point(7, 136);
             buttonStop.Margin = new Padding(4, 3, 4, 3);
             buttonStop.Name = "buttonStop";
             buttonStop.Size = new Size(197, 27);
@@ -216,6 +126,9 @@ namespace TrainDataRecorder
             // 
             // groupBoxData
             // 
+            groupBoxData.Controls.Add(label8);
+            groupBoxData.Controls.Add(label7);
+            groupBoxData.Controls.Add(textBoxNumBogies);
             groupBoxData.Controls.Add(checkBoxDataFrame);
             groupBoxData.Controls.Add(checkBoxSimProfile);
             groupBoxData.Controls.Add(checkBoxEuroMode);
@@ -232,15 +145,46 @@ namespace TrainDataRecorder
             groupBoxData.Margin = new Padding(4, 3, 4, 3);
             groupBoxData.Name = "groupBoxData";
             groupBoxData.Padding = new Padding(4, 3, 4, 3);
-            groupBoxData.Size = new Size(414, 141);
+            groupBoxData.Size = new Size(414, 175);
             groupBoxData.TabIndex = 0;
             groupBoxData.TabStop = false;
             groupBoxData.Text = "設定";
             // 
+            // label8
+            // 
+            label8.Location = new Point(188, 136);
+            label8.Margin = new Padding(4, 0, 4, 0);
+            label8.Name = "label8";
+            label8.Size = new Size(124, 24);
+            label8.TabIndex = 17;
+            label8.Text = "No. of bogies";
+            label8.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // label7
+            // 
+            label7.Location = new Point(7, 136);
+            label7.Margin = new Padding(4, 0, 4, 0);
+            label7.Name = "label7";
+            label7.Size = new Size(76, 24);
+            label7.TabIndex = 16;
+            label7.Text = "台車数";
+            label7.TextAlign = ContentAlignment.MiddleRight;
+            // 
+            // textBoxNumBogies
+            // 
+            textBoxNumBogies.Location = new Point(90, 136);
+            textBoxNumBogies.Margin = new Padding(4, 3, 4, 3);
+            textBoxNumBogies.Name = "textBoxNumBogies";
+            textBoxNumBogies.Size = new Size(90, 23);
+            textBoxNumBogies.TabIndex = 15;
+            textBoxNumBogies.Text = "2";
+            textBoxNumBogies.KeyUp += textBoxNumBogies_KeyUp;
+            textBoxNumBogies.Leave += textBoxNumBogies_Leave;
+            // 
             // checkBoxDataFrame
             // 
             checkBoxDataFrame.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxDataFrame.Location = new Point(264, 90);
+            checkBoxDataFrame.Location = new Point(264, 99);
             checkBoxDataFrame.Name = "checkBoxDataFrame";
             checkBoxDataFrame.Size = new Size(138, 19);
             checkBoxDataFrame.TabIndex = 14;
@@ -251,7 +195,7 @@ namespace TrainDataRecorder
             // checkBoxSimProfile
             // 
             checkBoxSimProfile.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxSimProfile.Location = new Point(264, 110);
+            checkBoxSimProfile.Location = new Point(264, 119);
             checkBoxSimProfile.Name = "checkBoxSimProfile";
             checkBoxSimProfile.Size = new Size(138, 19);
             checkBoxSimProfile.TabIndex = 13;
@@ -262,7 +206,7 @@ namespace TrainDataRecorder
             // checkBoxEuroMode
             // 
             checkBoxEuroMode.CheckAlign = ContentAlignment.MiddleRight;
-            checkBoxEuroMode.Location = new Point(264, 70);
+            checkBoxEuroMode.Location = new Point(264, 79);
             checkBoxEuroMode.Name = "checkBoxEuroMode";
             checkBoxEuroMode.Size = new Size(138, 19);
             checkBoxEuroMode.TabIndex = 4;
@@ -338,7 +282,7 @@ namespace TrainDataRecorder
             buttonFilePath.Location = new Point(366, 22);
             buttonFilePath.Margin = new Padding(4, 3, 4, 3);
             buttonFilePath.Name = "buttonFilePath";
-            buttonFilePath.Size = new Size(36, 27);
+            buttonFilePath.Size = new Size(36, 28);
             buttonFilePath.TabIndex = 1;
             buttonFilePath.Text = "...";
             buttonFilePath.UseVisualStyleBackColor = true;
@@ -363,6 +307,112 @@ namespace TrainDataRecorder
             textBoxFilePath.TabIndex = 0;
             textBoxFilePath.Text = "output.csv";
             // 
+            // buttonAdd
+            // 
+            buttonAdd.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            buttonAdd.Location = new Point(297, 62);
+            buttonAdd.Margin = new Padding(4, 3, 4, 3);
+            buttonAdd.Name = "buttonAdd";
+            buttonAdd.Size = new Size(61, 27);
+            buttonAdd.TabIndex = 22;
+            buttonAdd.Text = "→";
+            buttonAdd.UseVisualStyleBackColor = true;
+            buttonAdd.Click += buttonAdd_Click;
+            // 
+            // listBoxDataSelected
+            // 
+            listBoxDataSelected.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            listBoxDataSelected.FormattingEnabled = true;
+            listBoxDataSelected.Location = new Point(362, 0);
+            listBoxDataSelected.Margin = new Padding(4, 3, 4, 3);
+            listBoxDataSelected.Name = "listBoxDataSelected";
+            listBoxDataSelected.Size = new Size(291, 184);
+            listBoxDataSelected.TabIndex = 25;
+            // 
+            // buttonRemove
+            // 
+            buttonRemove.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            buttonRemove.Location = new Point(297, 95);
+            buttonRemove.Margin = new Padding(4, 3, 4, 3);
+            buttonRemove.Name = "buttonRemove";
+            buttonRemove.Size = new Size(61, 27);
+            buttonRemove.TabIndex = 23;
+            buttonRemove.Text = "←";
+            buttonRemove.UseVisualStyleBackColor = true;
+            buttonRemove.Click += buttonRemove_Click;
+            // 
+            // listBoxDataAvailable
+            // 
+            listBoxDataAvailable.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            listBoxDataAvailable.FormattingEnabled = true;
+            listBoxDataAvailable.Location = new Point(0, 0);
+            listBoxDataAvailable.Margin = new Padding(4, 3, 4, 3);
+            listBoxDataAvailable.Name = "listBoxDataAvailable";
+            listBoxDataAvailable.SelectionMode = SelectionMode.MultiExtended;
+            listBoxDataAvailable.Size = new Size(291, 184);
+            listBoxDataAvailable.TabIndex = 20;
+            // 
+            // buttonMoveUp
+            // 
+            buttonMoveUp.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            buttonMoveUp.Location = new Point(329, 0);
+            buttonMoveUp.Margin = new Padding(4, 3, 4, 3);
+            buttonMoveUp.Name = "buttonMoveUp";
+            buttonMoveUp.Size = new Size(29, 27);
+            buttonMoveUp.TabIndex = 21;
+            buttonMoveUp.Text = "↑";
+            buttonMoveUp.UseVisualStyleBackColor = true;
+            buttonMoveUp.Click += buttonMoveUp_Click;
+            // 
+            // buttonMoveDown
+            // 
+            buttonMoveDown.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            buttonMoveDown.Location = new Point(329, 157);
+            buttonMoveDown.Margin = new Padding(4, 3, 4, 3);
+            buttonMoveDown.Name = "buttonMoveDown";
+            buttonMoveDown.Size = new Size(29, 27);
+            buttonMoveDown.TabIndex = 24;
+            buttonMoveDown.Text = "↓";
+            buttonMoveDown.UseVisualStyleBackColor = true;
+            buttonMoveDown.Click += buttonMoveDown_Click;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(0, 187);
+            label6.Name = "label6";
+            label6.Size = new Size(163, 15);
+            label6.TabIndex = 6;
+            label6.Text = "使用可能なデーターチャンネル";
+            // 
+            // labelNumDataSelected
+            // 
+            labelNumDataSelected.Location = new Point(554, 187);
+            labelNumDataSelected.Name = "labelNumDataSelected";
+            labelNumDataSelected.Size = new Size(99, 15);
+            labelNumDataSelected.TabIndex = 8;
+            labelNumDataSelected.Text = "0x 有効";
+            labelNumDataSelected.TextAlign = ContentAlignment.TopRight;
+            // 
+            // panelDataSelect
+            // 
+            panelDataSelect.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+            panelDataSelect.AutoSize = true;
+            panelDataSelect.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panelDataSelect.Controls.Add(labelNumDataSelected);
+            panelDataSelect.Controls.Add(label6);
+            panelDataSelect.Controls.Add(buttonMoveDown);
+            panelDataSelect.Controls.Add(buttonMoveUp);
+            panelDataSelect.Controls.Add(listBoxDataAvailable);
+            panelDataSelect.Controls.Add(buttonRemove);
+            panelDataSelect.Controls.Add(listBoxDataSelected);
+            panelDataSelect.Controls.Add(buttonAdd);
+            panelDataSelect.Location = new Point(13, 195);
+            panelDataSelect.Margin = new Padding(4, 3, 4, 3);
+            panelDataSelect.Name = "panelDataSelect";
+            panelDataSelect.Size = new Size(662, 210);
+            panelDataSelect.TabIndex = 4;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -374,28 +424,20 @@ namespace TrainDataRecorder
             Margin = new Padding(4, 3, 4, 3);
             Name = "Form1";
             Text = "TrainDataRecorder";
-            panelDataSelect.ResumeLayout(false);
-            panelDataSelect.PerformLayout();
             groupBoxInit.ResumeLayout(false);
             groupBoxData.ResumeLayout(false);
             groupBoxData.PerformLayout();
+            panelDataSelect.ResumeLayout(false);
+            panelDataSelect.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.ListBox listBoxDataAvailable;
-        private System.Windows.Forms.ListBox listBoxDataSelected;
-        private System.Windows.Forms.Button buttonAdd;
-        private System.Windows.Forms.Button buttonRemove;
-        private System.Windows.Forms.Panel panelDataSelect;
         private System.Windows.Forms.GroupBox groupBoxInit;
         private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.Button buttonStartTrainCrew;
-        private System.Windows.Forms.Button buttonMoveDown;
-        private System.Windows.Forms.Button buttonMoveUp;
         private System.Windows.Forms.GroupBox groupBoxData;
         private System.Windows.Forms.Button buttonFilePath;
         private System.Windows.Forms.Label label1;
@@ -406,12 +448,23 @@ namespace TrainDataRecorder
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private Label label6;
-        private Label labelNumDataSelected;
         private CheckBox checkBoxEuroMode;
         private Button buttonStartBVE;
         private CheckBox checkBoxSimProfile;
         private CheckBox checkBoxDataFrame;
+        private Button buttonAdd;
+        private ListBox listBoxDataSelected;
+        private Button buttonRemove;
+        private ListBox listBoxDataAvailable;
+        private Button buttonMoveUp;
+        private Button buttonMoveDown;
+        private Label label6;
+        private Label labelNumDataSelected;
+        private Panel panelDataSelect;
+        private Label label8;
+        private Label label7;
+        private TextBox textBoxNumBogies;
+        private Button buttonStartDerailValley;
     }
 }
 

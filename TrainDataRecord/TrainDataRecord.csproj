@@ -19,6 +19,9 @@
     <Reference Include="Tanuden.Rudolf.Adapters.Bve">
       <HintPath>..\..\Tanuden.Adapters.Bve\bin\Debug\net10.0\Tanuden.Rudolf.Adapters.Bve.dll</HintPath>
     </Reference>
+    <Reference Include="Tanuden.Rudolf.Adapters.SharedMemory">
+      <HintPath>..\..\Rudolf.Adapters.SharedMemory\bin\Debug\net10.0\Tanuden.Rudolf.Adapters.SharedMemory.dll</HintPath>
+    </Reference>
     <Reference Include="Tanuden.Rudolf.Adapters.TrainCrew">
       <HintPath>..\..\Rudolf.Adapters.TrainCrew\bin\Debug\net10.0\Tanuden.Rudolf.Adapters.TrainCrew.dll</HintPath>
     </Reference>

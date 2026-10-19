@@ -21,7 +21,8 @@ namespace TrainDataRecorder
         {
             Disabled,
             TrainCrew,
-            BVE
+            BVE,
+            DerailValley,
         }
 
         public enum DataField
@@ -156,7 +157,7 @@ namespace TrainDataRecorder
             bool stationListLoaded = frame.Stations.List.Count > 0;
             bool doorListLoaded = frame.Doors.PerCar.Count > 0;
             bool signalListLoaded = frame.Signals.List.Count > 0;
-            bool speedLimitListLoaded = frame.SpeedLimit.Next != null && frame.SpeedLimit.Next.Count > 0;
+            bool speedLimitListLoaded = frame.SpeedLimits.Next != null && frame.SpeedLimits.Next.Count > 0;
             bool carListLoaded = frame.Cars.List.Count > 0;
 
             string itemDelimiter = euMode ? ";" : ",";

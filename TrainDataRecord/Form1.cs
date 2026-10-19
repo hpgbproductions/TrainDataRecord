@@ -20,11 +20,12 @@ namespace TrainDataRecorder
         IRudolfAdapter Adapter;
         OutputDataFrame Frame;
         List<DataField> SelectedDataFields;
-
         RecorderModes RecorderMode = RecorderModes.Disabled;
+
         bool WriteOutput = false;
         float Frequency = 10;
         int NumCars = 6;
+        int NumBogies = 2;
         string OutputPath = "output.csv";   // preload with default value. do not make const
 
         bool EuropeMode = false;
@@ -61,6 +62,8 @@ namespace TrainDataRecorder
             textBoxFilePath.Text = OutputPath;
             labelNumDataSelected.Text = NumDataSelected.ToString() + NumDataSelectedText;
         }
+
+        #region data channel selection buttons
 
         private void buttonAdd_Click(object sender, EventArgs e)
         {
@@ -126,6 +129,8 @@ namespace TrainDataRecorder
             }
         }
 
+        #endregion
+
         private void buttonFilePath_Click(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
@@ -139,6 +144,8 @@ namespace TrainDataRecorder
                 textBoxFilePath.Text = dialog.FileName;
             }
         }
+
+        #region number text boxes
 
         private void ValidateFrequencyValue()
         {
@@ -200,6 +207,39 @@ namespace TrainDataRecorder
             }
         }
 
+        private void ValidateNumBogiesValue()
+        {
+            int result;
+            bool success = int.TryParse(textBoxNumBogies.Text, CultureInfo.InvariantCulture, out result);
+
+            if (!success || result <= 0)
+            {
+                // Discard result value, do not update setting
+            }
+            else
+            {
+                NumBogies = result;
+            }
+
+            textBoxNumBogies.Text = NumBogies.ToString(CultureInfo.InvariantCulture);
+        }        
+
+        private void textBoxNumBogies_Leave(object sender, EventArgs e)
+        {
+            ValidateNumBogiesValue();
+        }
+
+        private void textBoxNumBogies_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ValidateNumBogiesValue();
+            }
+        }
+
+        #endregion
+
+        /// <summary>Performs general actions for starting the recorder for any sim.</summary>
         private void PrepareStartRecording()
         {
             #region form_actions
@@ -208,6 +248,7 @@ namespace TrainDataRecorder
             panelDataSelect.Enabled = false;
             buttonStartTrainCrew.Enabled = false;
             buttonStartBVE.Enabled = false;
+            buttonStartDerailValley.Enabled = false;
             buttonStop.Enabled = true;
 
             timer = new System.Timers.Timer((double)(1000f / Frequency));
@@ -325,6 +366,18 @@ namespace TrainDataRecorder
             Adapter.Start();
         }
 
+        private void buttonStartDerailValley_Click(object sender, EventArgs e)
+        {
+            RecorderMode = RecorderModes.DerailValley;
+            PrepareStartRecording();
+
+            Adapter = new Tanuden.Rudolf.Adapters.SharedMemory.RudolfAdapter(
+                @"Local\DerailValleyRudolfData.OutputDataFrame",
+                @"Local\DerailValleyRudolfData.SimulatorProfile");
+            Adapter.Start();
+        }
+
+        /// <summary>Performs general actions for stopping the recorder for any sim.</summary>
         private void PrepareStopRecording()
         {
             // Change the interactivity of elements
@@ -332,6 +385,7 @@ namespace TrainDataRecorder
             panelDataSelect.Enabled = true;
             buttonStartTrainCrew.Enabled = true;
             buttonStartBVE.Enabled = true;
+            buttonStartDerailValley.Enabled = true;
             buttonStop.Enabled = false;
 
             // Signal to stop the adapter
