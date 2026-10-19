@@ -1,15 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tanuden.Rudolf;
 using Tanuden.Rudolf.Enums;
-using Tanuden.Rudolf.Adapters.Bve;
-using Tanuden.Rudolf.Adapters.TrainCrew;
-using Tanuden.Rudolf.Sections;
-using System.Diagnostics.CodeAnalysis;
 
 namespace TrainDataRecorder
 {
@@ -73,16 +66,23 @@ namespace TrainDataRecorder
         /// Generate the string corresponding to a specified data field.
         /// Frame is not null-checked here.
         /// </summary>
-        public string GetDataString(OutputDataFrame frame, DataField dataField, int numCars, bool euMode, NumberFormatInfo numberFormatInfo)
+        public string GetDataString(OutputDataFrame frame, DataField dataField, int numCars, int numBogiesPerCar, bool euMode, NumberFormatInfo numberFormatInfo)
         {
+            // Value to convert into the returned string.
+            // Multi-column results are stored as delimited strings without a trailing delimiter.
             object? result;
+
+            // Expected non-nullable type of the result.
+            // Multi-column results are modelled as strings.
             Type rt = typeof(string);
 
+            // Non-nullability status of the Doors list
             bool doorListLoaded = frame.Doors.PerCar != null;
+
+            // Non-nullability status of the Cars list
             bool carListLoaded = frame.Cars.List != null;
 
             int nextStationIndex = frame.Stations.NextIndex.HasValue ? frame.Stations.NextIndex.Value : -1;
-
             bool nextStationExists =
                 frame.Stations.List != null &&
                 frame.Stations.NextIndex.HasValue &&
@@ -418,110 +418,137 @@ namespace TrainDataRecorder
                     break;
 
                 case DataField.cars_carNo:
-                    if (carListLoaded)
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
                     {
-                        result = "";
-                        for (int i = 0; i < numCars; i++)
+                        if (frame.Cars.List != null && i < frame.Cars.List.Count)
                         {
-                            if (i < frame.Cars.List!.Count)
-                            {
-                                result += DataToString(frame.Cars.List[i].CarNo, typeof(int), numberFormatInfo);
-                            }
-                            else
-                            {
-                                result += "null";
-                            }
-
-                            if (i < numCars - 1)
-                            {
-                                result += itemDelimiter;
-                            }
+                            result += DataToString(frame.Cars.List[i].CarNo, typeof(int), numberFormatInfo);
                         }
-                    }
-                    else
-                    {
-                        result = null;
+                        else
+                        {
+                            result += "null";
+                        }
+
+                        if (i < numCars - 1)
+                        {
+                            result += itemDelimiter;
+                        }
                     }
                     rt = typeof(string);
                     break;
-                case DataField.cars_bcPressure:
-                    if (carListLoaded)
+                case DataField.cars_bogies_position:
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
                     {
-                        result = "";
-                        for (int i = 0; i < numCars; i++)
+                        for (int j = 0; j < numBogiesPerCar; j++)
                         {
-                            if (i < frame.Cars.List.Count)
+                            if (frame.Cars.List != null && i < frame.Cars.List!.Count &&
+                                frame.Cars.List[i].Bogies != null && j < frame.Cars.List[i].Bogies!.Count)
                             {
-                                result += DataToString(frame.Cars.List[i].BcPressure, typeof(double), numberFormatInfo);
+                                result += DataToString(frame.Cars.List[i].Bogies![j].Position,
+                                    typeof(BogiePosition), numberFormatInfo);
                             }
                             else
                             {
-                                result += "null";
+                                result += null;
                             }
 
-                            if (i < numCars - 1)
+                            if (!(i == numCars - 1 && j == numBogiesPerCar - 1))
                             {
                                 result += itemDelimiter;
                             }
                         }
-                    }
-                    else
-                    {
-                        result = null;
                     }
                     rt = typeof(string);
                     break;
-                case DataField.cars_amperage:
-                    if (carListLoaded)
+                case DataField.cars_bogies_bcPressure:
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
                     {
-                        result = "";
-                        for (int i = 0; i < numCars; i++)
+                        for (int j = 0; j < numBogiesPerCar; j++)
                         {
-                            if (i < frame.Cars.List.Count)
+                            if (frame.Cars.List != null && i < frame.Cars.List!.Count &&
+                                frame.Cars.List[i].Bogies != null && j < frame.Cars.List[i].Bogies!.Count)
                             {
-                                result += DataToString(frame.Cars.List[i].Amperage, typeof(double), numberFormatInfo);
+                                result += DataToString(frame.Cars.List[i].Bogies![j].BcPressure,
+                                    typeof(double), numberFormatInfo);
                             }
                             else
                             {
-                                result += "null";
+                                result += null;
                             }
 
-                            if (i < numCars - 1)
+                            if (!(i == numCars - 1 && j == numBogiesPerCar - 1))
                             {
                                 result += itemDelimiter;
                             }
                         }
                     }
-                    else
+                    rt = typeof(string);
+                    break;
+                case DataField.cars_bogies_amperage:
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
                     {
-                        result = null;
+                        for (int j = 0; j < numBogiesPerCar; j++)
+                        {
+                            if (frame.Cars.List != null && i < frame.Cars.List!.Count &&
+                                frame.Cars.List[i].Bogies != null && j < frame.Cars.List[i].Bogies!.Count)
+                            {
+                                result += DataToString(frame.Cars.List[i].Bogies![j].Amperage,
+                                    typeof(double), numberFormatInfo);
+                            }
+                            else
+                            {
+                                result += null;
+                            }
+
+                            if (!(i == numCars - 1 && j == numBogiesPerCar - 1))
+                            {
+                                result += itemDelimiter;
+                            }
+                        }
                     }
                     rt = typeof(string);
                     break;
                 case DataField.cars_occupancyRate:
-                    if (carListLoaded)
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
                     {
-                        result = "";
-                        for (int i = 0; i < numCars; i++)
+                        if (frame.Cars.List != null && i < frame.Cars.List.Count)
                         {
-                            if (i < frame.Cars.List!.Count)
-                            {
-                                result += DataToString(frame.Cars.List[i].OccupancyRate, typeof(double), numberFormatInfo);
-                            }
-                            else
-                            {
-                                result += "null";
-                            }
+                            result += DataToString(frame.Cars.List[i].OccupancyRate, typeof(double), numberFormatInfo);
+                        }
+                        else
+                        {
+                            result += "null";
+                        }
 
-                            if (i < numCars - 1)
-                            {
-                                result += itemDelimiter;
-                            }
+                        if (i < numCars - 1)
+                        {
+                            result += itemDelimiter;
                         }
                     }
-                    else
+                    rt = typeof(string);
+                    break;
+                case DataField.cars_loadMass:
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
                     {
-                        result = null;
+                        if (frame.Cars.List != null && i < frame.Cars.List.Count)
+                        {
+                            result += DataToString(frame.Cars.List[i].LoadMass, typeof(double), numberFormatInfo);
+                        }
+                        else
+                        {
+                            result += "null";
+                        }
+
+                        if (i < numCars - 1)
+                        {
+                            result += itemDelimiter;
+                        }
                     }
                     rt = typeof(string);
                     break;

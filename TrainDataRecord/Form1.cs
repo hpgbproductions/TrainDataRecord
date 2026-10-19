@@ -25,7 +25,7 @@ namespace TrainDataRecorder
         bool WriteOutput = false;
         float Frequency = 10;
         int NumCars = 6;
-        int NumBogies = 2;
+        int NumBogiesPerCar = 2;
         string OutputPath = "output.csv";   // preload with default value. do not make const
 
         bool EuropeMode = false;
@@ -218,10 +218,10 @@ namespace TrainDataRecorder
             }
             else
             {
-                NumBogies = result;
+                NumBogiesPerCar = result;
             }
 
-            textBoxNumBogies.Text = NumBogies.ToString(CultureInfo.InvariantCulture);
+            textBoxNumBogies.Text = NumBogiesPerCar.ToString(CultureInfo.InvariantCulture);
         }        
 
         private void textBoxNumBogies_Leave(object sender, EventArgs e)
@@ -334,7 +334,7 @@ namespace TrainDataRecorder
                     else if (PerBogieFields.Contains(df))
                     {
                         // Per-bogie channels occupy NumBogies*NumCars columns
-                        numCommas = NumBogies * NumCars;
+                        numCommas = NumBogiesPerCar * NumCars;
                     }
                     else
                     {
@@ -437,7 +437,8 @@ namespace TrainDataRecorder
 
                     foreach (DataField dataField in SelectedDataFields)
                     {
-                        OutputStream.Write(Encoding.UTF8.GetBytes(GetDataString(Frame, dataField, NumCars, EuropeMode, NumberFormat) + ItemDelimiter));
+                        OutputStream.Write(Encoding.UTF8.GetBytes(
+                            GetDataString(Frame, dataField, NumCars, NumBogiesPerCar, EuropeMode, NumberFormat) + ItemDelimiter));
                     }
                     OutputStream.Write(Encoding.UTF8.GetBytes("\n"));
                 }
