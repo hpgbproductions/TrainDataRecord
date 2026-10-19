@@ -323,13 +323,18 @@ namespace TrainDataRecorder
                     // First write the channel name
                     OutputStream.Write(Encoding.UTF8.GetBytes(df.ToString()));
 
+                    // Number of commas --> number of columns reserved for this field in the CSV
                     int numCommas;
-                    if (df == DataField.doors_perCar_carNo || df == DataField.doors_perCar_sideOpened ||
-                        df == DataField.cars_amperage || df == DataField.cars_bcPressure ||
-                        df == DataField.cars_carNo || df == DataField.cars_occupancyRate)
+
+                    if (PerCarFields.Contains(df))
                     {
-                        // Per-car channels occupy NumCars columns, write NumCars commas
+                        // Per-car channels occupy NumCars columns
                         numCommas = NumCars;
+                    }
+                    else if (PerBogieFields.Contains(df))
+                    {
+                        // Per-bogie channels occupy NumBogies*NumCars columns
+                        numCommas = NumBogies * NumCars;
                     }
                     else
                     {

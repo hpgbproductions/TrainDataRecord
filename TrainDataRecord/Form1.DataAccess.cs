@@ -15,96 +15,9 @@ namespace TrainDataRecorder
     partial class Form1
     {
         /// <summary>
-        /// Signals that the recorder should be stopped (RecorderModes.Disabled), or is running in a game (other values).
-        /// </summary>
-        public enum RecorderModes
-        {
-            Disabled,
-            TrainCrew,
-            BVE,
-            DerailValley,
-        }
-
-        public enum DataField
-        {
-            time_sim,
-            time_elapsed,
-            time_tick,
-            diagram_trainNumber,
-            diagram_boundFor,
-            diagram_serviceType,
-            diagram_direction,
-            diagram_runNumber,
-            stations_currentIndex,
-            stations_nextIndex,
-            stations_next_name,
-            stations_next_fromStartDistance,
-            stations_next_absoluteDistance,
-            stations_next_doorSide,
-            stations_next_stopType,
-            stations_next_arrival,
-            stations_next_departure,
-            stations_next_stopPositionName,
-            stations_next_isTimeTaken,
-            physics_speed,
-            physics_fromStartDistance,
-            physics_absoluteDistance,
-            physics_gradient,
-            physics_mrPressure,
-            controllers_powerNotch,
-            controllers_brakeNotch,
-            controllers_reverser,
-            controllers_ato_active,
-            controllers_ato_notch,
-            controllers_tasc_active,
-            controllers_tasc_notch,
-            controllers_tasc_inching,
-            controllers_deadman,
-            doors_allClosed,
-            doors_perCar_carNo,
-            doors_perCar_sideOpened,
-            lamps_doorClose,
-            lamps_atsReady,
-            lamps_atsBrakeApply,
-            lamps_atsOpen,
-            lamps_regenerative,
-            lamps_ebTimer,
-            lamps_emergencyBrake,
-            lamps_overload,
-            lamps_pilot,
-            lamps_ato,
-            ats_class,
-            ats_speed,
-            ats_state,
-            signals_next_name,
-            signals_next_type,
-            signals_next_phase,
-            signals_next_distance,
-            speedLimit_current,
-            speedLimit_currentType,
-            speedLimit_next,
-            speedLimit_next_distance,
-            speedLimit_next_type,
-            cars_carNo,
-            cars_bcPressure,
-            cars_amperage,
-            cars_occupancyRate,
-            switches_hornAir,
-            switches_hornElectric,
-            switches_buzzerDriver,
-            switches_buzzerConductor,
-            switches_headlights,
-            switches_highBeam,
-            switches_wiper
-        }
-
-        /// <summary>
         /// Wrapper for ToString methods of different types.
+        /// Null becomes <c>"null"</c>, empty strings become <c>"empty"</c>.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <param name="type"></param>
-        /// <param name="numberFormatInfo"></param>
-        /// <returns></returns>
         private string DataToString(object? obj, Type type, NumberFormatInfo numberFormatInfo)
         {
             if (obj == null)
@@ -115,7 +28,8 @@ namespace TrainDataRecorder
             {
                 if (type == typeof(string))
                 {
-                    return (string)obj;
+                    string s = (string)obj;
+                    return (s == string.Empty) ? "empty" : s;
                 }
                 else if (type == typeof(int))
                 {
@@ -138,9 +52,13 @@ namespace TrainDataRecorder
                     // Non-basic types, simply use the default ToString.
                     // Enums are converted to their string names
                     string? s = obj.ToString();
-                    if (s == null || s == string.Empty)
+                    if (s == null)
                     {
                         return "null";
+                    }
+                    else if (s == string.Empty)
+                    {
+                        return "empty";
                     }
                     else
                     {
@@ -152,13 +70,10 @@ namespace TrainDataRecorder
 
         /// <summary>
         /// Generate the string corresponding to a specified data field.
+        /// Frame is not null-checked here.
         /// </summary>
-        /// <param name="frame">Data frame to use.</param>
-        /// <param name="dataField">Selected information to read.</param>
-        /// <returns></returns>
         public string GetDataString(OutputDataFrame frame, DataField dataField, int numCars, bool euMode, NumberFormatInfo numberFormatInfo)
         {
-            
             object? result;
             Type rt = typeof(string);
 
@@ -167,6 +82,11 @@ namespace TrainDataRecorder
             bool signalListLoaded = frame.Signals.List.Count > 0;
             bool speedLimitListLoaded = frame.SpeedLimits.Next != null && frame.SpeedLimits.Next.Count > 0;
             bool carListLoaded = frame.Cars.List.Count > 0;
+
+            bool nextStationExists = stationListLoaded && frame.Stations.NextIndex.HasValue &&
+                frame.Stations.NextIndex.Value >= 0 &&
+                frame.Stations.NextIndex.Value < frame.Stations.List.Count;
+            int nextStationIndex = frame.Stations.NextIndex.HasValue ? frame.Stations.NextIndex.Value : -1;
 
             string itemDelimiter = euMode ? ";" : ",";
 
@@ -215,39 +135,55 @@ namespace TrainDataRecorder
                     rt = typeof(int);
                     break;
                 case DataField.stations_next_name:
-                    result = stationListLoaded ? frame.Stations.List[0].Name : "";
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Name : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_fromStartDistance:
-                    result = stationListLoaded ? frame.Stations.List[0].FromStartDistance : 0;
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].FromStartDistance : null;
                     rt = typeof(double);
                     break;
                 case DataField.stations_next_absoluteDistance:
-                    result = stationListLoaded ? frame.Stations.List[0].AbsoluteDistance : 0;
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].AbsoluteDistance : null;
                     rt = typeof(double);
                     break;
                 case DataField.stations_next_doorSide:
-                    result = stationListLoaded ? frame.Stations.List[0].DoorSide : 0;
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].DoorSide : null;
                     rt = typeof(int);
                     break;
                 case DataField.stations_next_stopType:
-                    result = stationListLoaded ? frame.Stations.List[0].StopType : "";
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].StopType : null;
                     rt = typeof(StopType);
                     break;
                 case DataField.stations_next_arrival:
-                    result = stationListLoaded ? frame.Stations.List[0].Arrival : "";
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Arrival : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_departure:
-                    result = stationListLoaded ? frame.Stations.List[0].Departure : "";
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Departure : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_stopPositionName:
-                    result = stationListLoaded ? frame.Stations.List[0].StopPositionName : "";
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].StopPositionName : null;
+                    rt = typeof(string);
+                    break;
+                case DataField.stations_next_trackSectionName:
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].TrackSectionName : null;
+                    rt = typeof(string);
+                    break;
+                case DataField.stations_next_remarks:
+                    result = nextStationExists ? frame.Stations.List[nextStationIndex].Remarks : null;
+                    rt = typeof(string);
+                    break;
+                case DataField.stations_next_entrySpeed:
+                    result = stationListLoaded ? frame.Stations.List[nextStationIndex].EntrySpeed : null;
+                    rt = typeof(string);
+                    break;
+                case DataField.stations_next_exitSpeed:
+                    result = stationListLoaded ? frame.Stations.List[nextStationIndex].ExitSpeed : null;
                     rt = typeof(string);
                     break;
                 case DataField.stations_next_isTimeTaken:
-                    result = stationListLoaded ? frame.Stations.List[0].IsTimeTaken : null;
+                    result = stationListLoaded ? frame.Stations.List[nextStationIndex].IsTimeTaken : null;
                     rt = typeof(bool);
                     break;
 
