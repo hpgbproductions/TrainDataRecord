@@ -34,6 +34,7 @@ namespace TrainDataRecorder
 
         bool WriteSimProfiles = false;
         string PrevScenarioId = "";
+        long PrevProfileSequence = 0;
         string ProfilePath = "";
         bool WriteDataFrames = false;
         string DataFramePath = "";
@@ -450,12 +451,14 @@ namespace TrainDataRecorder
                 }
 
                 // Simulator Profile JSON file
-                if (WriteSimProfiles && Frame.ScenarioId != PrevScenarioId)
+                if (WriteSimProfiles)
                 {
-                    PrevScenarioId = Frame.ScenarioId;
                     SimulatorProfile? profile = Adapter.GetProfile();
-                    if (profile != null)
+                    if (profile != null &&
+                        (profile.Sequence != PrevProfileSequence || profile.ScenarioId != PrevScenarioId))
                     {
+                        PrevProfileSequence = profile.Sequence;
+                        PrevScenarioId = profile.ScenarioId;
                         File.WriteAllText(ProfilePath, JsonSerializer.Serialize(profile, DebugJsonSerializerOptions));
                     }
                 }
