@@ -220,6 +220,10 @@ namespace TrainDataRecorder
                     result = frame.Physics.MrPressure;
                     rt = typeof(double);
                     break;
+                case DataField.physics_erPressure:
+                    result = frame.Physics.ErPressure;
+                    rt = typeof(double);
+                    break;
                 case DataField.physics_totalLoadMass:
                     result = frame.Physics.TotalLoadMass;
                     rt = typeof(double);
@@ -437,6 +441,66 @@ namespace TrainDataRecorder
                     }
                     rt = typeof(string);
                     break;
+                case DataField.cars_bpPressure:
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
+                    {
+                        if (frame.Cars.List != null && i < frame.Cars.List.Count)
+                        {
+                            result += DataToString(frame.Cars.List[i].BpPressure, typeof(double), numberFormatInfo);
+                        }
+                        else
+                        {
+                            result += "null";
+                        }
+
+                        if (i < numCars - 1)
+                        {
+                            result += itemDelimiter;
+                        }
+                    }
+                    rt = typeof(string);
+                    break;
+                case DataField.cars_sapPressure:
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
+                    {
+                        if (frame.Cars.List != null && i < frame.Cars.List.Count)
+                        {
+                            result += DataToString(frame.Cars.List[i].SapPressure, typeof(double), numberFormatInfo);
+                        }
+                        else
+                        {
+                            result += "null";
+                        }
+
+                        if (i < numCars - 1)
+                        {
+                            result += itemDelimiter;
+                        }
+                    }
+                    rt = typeof(string);
+                    break;
+                case DataField.cars_auxPressure:
+                    result = "";
+                    for (int i = 0; i < numCars; i++)
+                    {
+                        if (frame.Cars.List != null && i < frame.Cars.List.Count)
+                        {
+                            result += DataToString(frame.Cars.List[i].AuxPressure, typeof(double), numberFormatInfo);
+                        }
+                        else
+                        {
+                            result += "null";
+                        }
+
+                        if (i < numCars - 1)
+                        {
+                            result += itemDelimiter;
+                        }
+                    }
+                    rt = typeof(string);
+                    break;
                 case DataField.cars_bogies_position:
                     result = "";
                     for (int i = 0; i < numCars; i++)
@@ -451,7 +515,7 @@ namespace TrainDataRecorder
                             }
                             else
                             {
-                                result += null;
+                                result += "null";
                             }
 
                             if (!(i == numCars - 1 && j == numBogiesPerCar - 1))
@@ -476,7 +540,7 @@ namespace TrainDataRecorder
                             }
                             else
                             {
-                                result += null;
+                                result += "null";
                             }
 
                             if (!(i == numCars - 1 && j == numBogiesPerCar - 1))
@@ -501,7 +565,7 @@ namespace TrainDataRecorder
                             }
                             else
                             {
-                                result += null;
+                                result += "null";
                             }
 
                             if (!(i == numCars - 1 && j == numBogiesPerCar - 1))
