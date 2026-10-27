@@ -56,7 +56,7 @@ namespace TrainDataRecorder
             listBoxDataAvailable = new ListBox();
             buttonMoveUp = new Button();
             buttonMoveDown = new Button();
-            label6 = new Label();
+            labelInfoMessage = new Label();
             labelNumDataSelected = new Label();
             panelDataSelect = new Panel();
             groupBoxInit.SuspendLayout();
@@ -376,14 +376,14 @@ namespace TrainDataRecorder
             buttonMoveDown.UseVisualStyleBackColor = true;
             buttonMoveDown.Click += buttonMoveDown_Click;
             // 
-            // label6
+            // labelInfoMessage
             // 
-            label6.AutoSize = true;
-            label6.Location = new Point(0, 187);
-            label6.Name = "label6";
-            label6.Size = new Size(163, 15);
-            label6.TabIndex = 6;
-            label6.Text = "使用可能なデーターチャンネル";
+            labelInfoMessage.AutoSize = true;
+            labelInfoMessage.Location = new Point(0, 187);
+            labelInfoMessage.Name = "labelInfoMessage";
+            labelInfoMessage.Size = new Size(88, 15);
+            labelInfoMessage.TabIndex = 6;
+            labelInfoMessage.Text = "INFO MESSAGE";
             // 
             // labelNumDataSelected
             // 
@@ -400,14 +400,14 @@ namespace TrainDataRecorder
             panelDataSelect.AutoSize = true;
             panelDataSelect.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             panelDataSelect.Controls.Add(labelNumDataSelected);
-            panelDataSelect.Controls.Add(label6);
+            panelDataSelect.Controls.Add(labelInfoMessage);
             panelDataSelect.Controls.Add(buttonMoveDown);
             panelDataSelect.Controls.Add(buttonMoveUp);
             panelDataSelect.Controls.Add(listBoxDataAvailable);
             panelDataSelect.Controls.Add(buttonRemove);
             panelDataSelect.Controls.Add(listBoxDataSelected);
             panelDataSelect.Controls.Add(buttonAdd);
-            panelDataSelect.Location = new Point(13, 195);
+            panelDataSelect.Location = new Point(13, 205);
             panelDataSelect.Margin = new Padding(4, 3, 4, 3);
             panelDataSelect.Name = "panelDataSelect";
             panelDataSelect.Size = new Size(662, 210);
@@ -458,7 +458,7 @@ namespace TrainDataRecorder
         private ListBox listBoxDataAvailable;
         private Button buttonMoveUp;
         private Button buttonMoveDown;
-        private Label label6;
+        private Label labelInfoMessage;
         private Label labelNumDataSelected;
         private Panel panelDataSelect;
         private Label label8;

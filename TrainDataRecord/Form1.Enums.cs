@@ -112,5 +112,12 @@
             DataField.cars_bogies_bcPressure,
             DataField.cars_bogies_position,
         };
+
+        public enum MessageType
+        {
+            Normal,
+            Warning,
+            Error,
+        }
     }
 }

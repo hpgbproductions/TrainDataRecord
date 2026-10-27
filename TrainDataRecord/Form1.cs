@@ -62,6 +62,8 @@ namespace TrainDataRecorder
 
             textBoxFilePath.Text = OutputPath;
             labelNumDataSelected.Text = NumDataSelected.ToString() + NumDataSelectedText;
+
+            SetInfoMessage(MessageType.Normal, "hpgbproductions 2026");
         }
 
         #region data channel selection buttons
@@ -291,10 +293,12 @@ namespace TrainDataRecorder
             if (SelectedDataFields.Count == 0)
             {
                 WriteOutput = false;
+                SetInfoMessage(MessageType.Warning, "Output CSV will not be written as no data channels are enabled.");
             }
             else
             {
                 WriteOutput = true;
+                SetInfoMessage(MessageType.Normal, $"Started in mode {RecorderMode}.");
             }
             #endregion
 
@@ -309,7 +313,7 @@ namespace TrainDataRecorder
                 catch (Exception ex)
                 {
                     PrepareStopRecording();
-                    MessageBox.Show(ex.Message, "Error");
+                    SetInfoMessage(MessageType.Error, ex.Message);
                     return;
                 }
                 #endregion
@@ -460,6 +464,7 @@ namespace TrainDataRecorder
                         PrevProfileSequence = profile.Sequence;
                         PrevScenarioId = profile.ScenarioId;
                         File.WriteAllText(ProfilePath, JsonSerializer.Serialize(profile, DebugJsonSerializerOptions));
+                        SetInfoMessage(MessageType.Normal, $"New profile: {profile.ScenarioId}/{profile.Sequence}");
                     }
                 }
             }
@@ -481,6 +486,31 @@ namespace TrainDataRecorder
                     Adapter.Dispose();
                 }
             }
+        }
+
+        private void SetInfoMessage(MessageType messageType, string str)
+        {
+            string prefix;
+            Color textColor;
+
+            switch (messageType)
+            {
+                case MessageType.Error:
+                    prefix = "[ERROR] ";
+                    textColor = Color.Red;
+                    break;
+                case MessageType.Warning:
+                    prefix = "[WARNING] ";
+                    textColor = Color.Orange;
+                    break;
+                default:
+                    prefix = "[INFO] ";
+                    textColor = Form1.DefaultForeColor;
+                    break;
+            }
+
+            labelInfoMessage.Text = prefix + str;
+            labelInfoMessage.ForeColor = textColor;
         }
     }
 }
