@@ -398,6 +398,8 @@ namespace TrainDataRecorder
             buttonStartDerailValley.Enabled = true;
             buttonStop.Enabled = false;
 
+            SetInfoMessage(MessageType.Normal, "Stopped recording.");
+
             // Signal to stop the adapter
             // Cannot close adapter directly here as it may be processing a frame ==> close at end of tick
             RecorderMode = RecorderModes.Disabled;
@@ -464,7 +466,6 @@ namespace TrainDataRecorder
                         PrevProfileSequence = profile.Sequence;
                         PrevScenarioId = profile.ScenarioId;
                         File.WriteAllText(ProfilePath, JsonSerializer.Serialize(profile, DebugJsonSerializerOptions));
-                        SetInfoMessage(MessageType.Normal, $"New profile: {profile.ScenarioId}/{profile.Sequence}");
                     }
                 }
             }
@@ -488,6 +489,7 @@ namespace TrainDataRecorder
             }
         }
 
+        /// <summary>Change the message shown. Can only be called in the same thread as the form.</summary>
         private void SetInfoMessage(MessageType messageType, string str)
         {
             string prefix;
